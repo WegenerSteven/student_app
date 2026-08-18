@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ student.name }} - Details{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">{{ student.name }}</h4>
+                <span class="badge fs-6 {% if student.grade == 'A' %}bg-success{% elif student.grade == 'Fail' %}bg-danger{% else %}bg-primary{% endif %}">
+                    Grade: {{ student.grade }}
+                </span>
+            </div>
+            <div class="card-body">
+                <p><strong>Email:</strong> {{ student.email }}</p>
+                <p><strong>Phone:</strong> {{ student.phone|default:"Not Provided" }}</p>
+                <p><strong>Marks:</strong> {{ student.marks }}%</p>
+                <p><strong>Registered On:</strong> {{ student.created_at|date:"M d, Y" }}</p>
+            </div>
+            <div class="card-footer d-flex gap-2">
+                <a href="{% url 'student_app:edit' student.pk %}" class="btn btn-warning">Edit Student</a>
+                <a href="{% url 'student_app:delete' student.pk %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'student_app:list' %}" class="btn btn-secondary ms-auto">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
