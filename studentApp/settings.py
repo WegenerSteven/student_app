@@ -66,6 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
+                
             ],
         },
     },
@@ -121,12 +123,13 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+#Authentication
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = '/students/'  # Redirect to student list after login
+LOGOUT_REDIRECT_URL = '/accounts/login/'  # Redirect to login page after logout
+
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
-}
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
