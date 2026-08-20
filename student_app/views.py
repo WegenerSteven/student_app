@@ -1,12 +1,33 @@
 from django.contrib import messages
+
+
+
+from django.contrib.auth.decorators import login_required
+
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import StudentForm
+from .forms import StudentForm,CustomUserCreationForm
 from .models import Student
 
+# REGISTRATION VIEW
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, f"Welcome , {user.first_name}!")
+            return redirect('student_app:list')
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'registration/register.html', {
+        'form': form
+    })
 
 # 1. LIST VIEW (With Search)
+@login_required
 def student_list(request):
     query = request.GET.get('q', '')
     if query:
@@ -22,11 +43,13 @@ def student_list(request):
     })
 
 # 2. DETAIL VIEW
+@login_required
 def student_detail(request, pk):
     student = get_object_or_404(Student, pk=pk)
     return render(request, 'student_app/student_detail.html', {'student': student})
 
 # 3. CREATE VIEW
+@login_required
 def student_add(request):
     if request.method == 'POST':
         form = StudentForm(request.POST)
@@ -44,6 +67,7 @@ def student_add(request):
     })
 
 # 4. UPDATE VIEW
+@login_required
 def student_edit(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == 'POST':
@@ -63,6 +87,7 @@ def student_edit(request, pk):
     })
 
 # 5. DELETE VIEW
+@login_required
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == 'POST':
