@@ -1,29 +1,445 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ student.name }} - Details{% endblock %}
+{% block title %}{{ student.name }} - Student Profile{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">{{ student.name }}</h4>
-                <span class="badge fs-6 {% if student.grade == 'A' %}bg-success{% elif student.grade == 'Fail' %}bg-danger{% else %}bg-primary{% endif %}">
-                    Grade: {{ student.grade }}
+
+<style>
+
+    .profile-wrapper {
+        max-width: 1000px;
+        margin: 40px auto;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #111827, #2563eb);
+        border-radius: 18px;
+        padding: 40px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-header::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        right: -60px;
+        top: -70px;
+    }
+
+    .profile-top {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .avatar {
+        width: 95px;
+        height: 95px;
+        border-radius: 50%;
+        background: white;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+    .profile-name h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    .profile-name p {
+        margin: 5px 0 0;
+        opacity: 0.8;
+    }
+
+    .grade-badge {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 7px 15px;
+        border-radius: 30px;
+        font-size: 14px;
+        font-weight: 600;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #374151;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .back-link:hover {
+        color: #2563eb;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-top: 25px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 25px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .info-item {
+        padding: 18px;
+        background: #f8fafc;
+        border-radius: 10px;
+    }
+
+    .info-label {
+        display: block;
+        color: #6b7280;
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #111827;
+        font-size: 16px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .academic-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .performance-box {
+        padding: 25px;
+        background: #f8fafc;
+        border-radius: 12px;
+    }
+
+    .performance-number {
+        font-size: 42px;
+        font-weight: 700;
+        color: #2563eb;
+    }
+
+    .performance-label {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .progress {
+        height: 10px;
+        margin-top: 15px;
+        border-radius: 20px;
+        background: #e5e7eb;
+    }
+
+    .progress-bar {
+        border-radius: 20px;
+        background: #2563eb;
+    }
+
+    .grade-box {
+        padding: 25px;
+        border-radius: 12px;
+        background: #eff6ff;
+        text-align: center;
+    }
+
+    .grade-letter {
+        font-size: 52px;
+        font-weight: 800;
+        color: #2563eb;
+    }
+
+    .grade-description {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .btn-edit {
+        background: #f59e0b;
+        color: white;
+        border: none;
+    }
+
+    .btn-edit:hover {
+        background: #d97706;
+        color: white;
+    }
+
+    .btn-delete {
+        background: #dc2626;
+        color: white;
+        border: none;
+    }
+
+    .btn-delete:hover {
+        background: #b91c1c;
+        color: white;
+    }
+
+    @media (max-width: 700px) {
+
+        .profile-wrapper {
+            margin: 20px auto;
+        }
+
+        .profile-header {
+            padding: 25px;
+        }
+
+        .profile-top {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .profile-name h1 {
+            font-size: 25px;
+        }
+
+        .info-grid,
+        .academic-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .actions a,
+        .actions form,
+        .actions button {
+            width: 100%;
+        }
+    }
+
+</style>
+
+
+<div class="profile-wrapper">
+
+    <!-- BACK -->
+    <a href="{% url 'student_app:list' %}" class="back-link">
+        ← Back to Students
+    </a>
+
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+
+        <div class="profile-top">
+
+            <!-- INITIALS -->
+            <div class="avatar">
+                {{ student.name|slice:":1"|upper }}
+            </div>
+
+
+            <div class="profile-name">
+
+                <h1>
+                    {{ student.name }}
+                </h1>
+
+                <p>
+                    Student Profile
+                </p>
+
+                <span class="grade-badge">
+                    Grade {{ student.grade }}
                 </span>
+
             </div>
-            <div class="card-body">
-                <p><strong>Email:</strong> {{ student.email }}</p>
-                <p><strong>Phone:</strong> {{ student.phone|default:"Not Provided" }}</p>
-                <p><strong>Marks:</strong> {{ student.marks }}%</p>
-                <p><strong>Registered On:</strong> {{ student.created_at|date:"M d, Y" }}</p>
-            </div>
-            <div class="card-footer d-flex gap-2">
-                <a href="{% url 'student_app:edit' student.pk %}" class="btn btn-warning">Edit Student</a>
-                <a href="{% url 'student_app:delete' student.pk %}" class="btn btn-danger">Delete</a>
-                <a href="{% url 'student_app:list' %}" class="btn btn-secondary ms-auto">Back to List</a>
-            </div>
+
         </div>
+
     </div>
+
+
+    <!-- CONTACT INFORMATION -->
+    <div class="info-card">
+
+        <div class="section-title">
+            Contact Information
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Email Address
+                </span>
+
+                <span class="info-value">
+                    {{ student.email }}
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Phone Number
+                </span>
+
+                <span class="info-value">
+                    {{ student.phone|default:"Not Provided" }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACADEMIC PERFORMANCE -->
+    <div class="info-card">
+
+        <div class="section-title">
+            Academic Performance
+        </div>
+
+        <div class="academic-grid">
+
+
+            <!-- MARKS -->
+            <div class="performance-box">
+
+                <div class="performance-number">
+                    {{ student.marks }}%
+                </div>
+
+                <div class="performance-label">
+                    Overall Marks
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        role="progressbar"
+                        style="width: {{ student.marks }}%;"
+                        aria-valuenow="{{ student.marks }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- GRADE -->
+            <div class="grade-box">
+
+                <div class="grade-letter">
+                    {{ student.grade }}
+                </div>
+
+                <div class="grade-description">
+                    Overall Grade
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT INFORMATION -->
+    <div class="info-card">
+
+        <div class="section-title">
+            Student Information
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Student ID
+                </span>
+
+                <span class="info-value">
+                    #{{ student.pk }}
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Registered On
+                </span>
+
+                <span class="info-value">
+                    {{ student.created_at|date:"F d, Y" }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+        <div class="actions">
+
+            <a
+                href="{% url 'student_app:edit' student.pk %}"
+                class="btn btn-edit px-4 py-2">
+                Edit Student
+            </a>
+
+
+            <a
+                href="{% url 'student_app:delete' student.pk %}"
+                class="btn btn-delete px-4 py-2">
+                Delete Student
+            </a>
+
+        </div>
+
+    </div>
+
 </div>
+
 {% endblock %}
