@@ -1,102 +1,223 @@
 from django.contrib import messages
-
-
-
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
-from django.db.models import Q
+from functools import wraps
+
+from django.core.exceptions import PermissionDenied
+
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import StudentForm,CustomUserCreationForm
-from .models import Student
+from django.db import transaction
+from django.db.models import Q
+
+from .forms import StudentForm, CustomUserCreationForm, EnrollmentForm
+from .models import Student, Enrollment
+
+
+# Authorization helpers
+def is_admin(user):
+    return user.is_staff or user.is_superuser
+
+
+def is_teacher(user):
+    return user.groups.filter(name="Teacher").exists()
+
+
+def is_student(user):
+    return user.groups.filter(name="Student").exists()
+
+
+def admin_required(view):
+    @wraps(view)
+    @login_required
+    def wrapped(request, *args, **kwargs):
+        if not is_admin(request.user):
+            raise PermissionDenied
+        return view(request, *args, **kwargs)
+
+    return wrapped
+
+
+def teacher_or_admin_required(view):
+    @wraps(view)
+    @login_required
+    def wrapped(request, *args, **kwargs):
+        if not (is_admin(request.user) or is_teacher(request.user)):
+            raise PermissionDenied
+        return view(request, *args, **kwargs)
+
+    return wrapped
+
 
 # REGISTRATION VIEW
 def register(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
-            user = form.save()
-            messages.success(request, f"Welcome , {user.first_name}!")
-            return redirect('student_app:list')
+            with transaction.atomic():
+                user = form.save()
+                student_group, _ = Group.objects.get_or_create(name="Student")
+                user.groups.add(student_group)
+
+            messages.success(request, "Your account was created successfully.")
+            return redirect("login")
     else:
         form = CustomUserCreationForm()
 
-    return render(request, 'registration/register.html', {
-        'form': form
-    })
+    return render(request, "registration/register.html", {"form": form})
+
 
 # 1. LIST VIEW (With Search)
 @login_required
 def student_list(request):
-    query = request.GET.get('q', '')
+    if is_student(request.user):
+        return redirect(
+            "student_app:detail",
+            pk=request.user.student_profile.pk,
+        )
+
+    query = request.GET.get("q", "")
+    students = Student.objects.select_related("user").order_by("-created_at")
+
     if query:
         students = Student.objects.filter(
-            Q(name__icontains=query) | Q(email__icontains=query)
+            Q(user__first_name__icontains=query)
+            | Q(user__last_name__icontains=query)
+            | Q(user__email__icontains=query)
         )
-    else:
-        students = Student.objects.all().order_by('-created_at')
-        
-    return render(request, 'student_app/student_list.html', {
-        'students': students,
-        'query': query
-    })
+
+    return render(
+        request,
+        "student_app/student_list.html",
+        {
+            "students": students,
+            "query": query,
+            "can_add": is_admin(request.user),
+            "can_edit_marks": is_admin(request.user) or is_teacher(request.user),
+            "can_delete": is_admin(request.user),
+        },
+    )
+
 
 # 2. DETAIL VIEW
 @login_required
 def student_detail(request, pk):
-    student = get_object_or_404(Student, pk=pk)
-    return render(request, 'student_app/student_detail.html', {'student': student})
+    student = get_object_or_404(Student.objects.select_related("user"), pk=pk)
+
+    if is_student(request.user) and student.user_id != request.user.id:
+        raise PermissionDenied
+    
+    enrollments = student.enrollments.select_related("course")
+
+    return render(
+        request,
+        "student_app/student_detail.html",
+        {
+            "student": student,
+            "enrollments": enrollments,
+            "can_edit_marks": is_admin(request.user) or is_teacher(request.user),
+            "can_delete": is_admin(request.user),
+        },
+    )
+
 
 # 3. CREATE VIEW
 @login_required
 def student_add(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = StudentForm(request.POST)
+
         if form.is_valid():
             student = form.save()
-            messages.success(request, f"Student '{student.name}' was successfully added!")
-            return redirect('student_app:list')
+            messages.success(
+                request, f"Student '{student.name}' was successfully added!"
+            )
+            return redirect("student_app:list")
     else:
         form = StudentForm()
-        
-    return render(request, 'student_app/student_form.html', {
-        'form': form,
-        'title': 'Add New Student',
-        'button_text': 'Save Student'
-    })
+
+    return render(
+        request,
+        "student_app/student_form.html",
+        {"form": form, "title": "Add New Student", "button_text": "Save Student"},
+    )
+
 
 # 4. UPDATE VIEW
-@login_required
+@teacher_or_admin_required
 def student_edit(request, pk):
-    student = get_object_or_404(Student, pk=pk)
-    if request.method == 'POST':
+    student = get_object_or_404(Student.objects.select_related("user"), pk=pk)
+
+    if request.method == "POST":
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            messages.success(request, f"Student '{student.name}' was successfully updated!")
-            return redirect('student_app:detail', pk=student.pk)
+            messages.success(
+                request, f"Student '{student.name}' was successfully updated!"
+            )
+            return redirect("student_app:detail", pk=student.pk)
     else:
         form = StudentForm(instance=student)
-        
-    return render(request, 'student_app/student_form.html', {
-        'form': form,
-        'student': student,
-        'title': f'Edit Student: {student.name}',
-        'button_text': 'Update Student'
-    })
+
+    return render(
+        request,
+        "student_app/student_form.html",
+        {
+            "form": form,
+            "student": student,
+            "title": f"Edit Student: {student.name}",
+            "button_text": "Update Student",
+        },
+    )
+
+
+@teacher_or_admin_required
+def enrollment_edit(request, pk):
+    enrollment = get_object_or_404(
+        Enrollment.objects.select_related("student", "course"),
+        pk=pk,
+    )
+
+    if request.method == "POST":
+        form = EnrollmentForm(request.POST, instance=enrollment)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Marks updated successfully.")
+            return redirect(
+                "student_app:detail",
+                pk=enrollment.student.pk,
+            )
+    else:
+        form = EnrollmentForm(instance=enrollment)
+
+    return render(
+        request,
+        "student_app/student_form.html",
+        {
+            "form": form,
+            "title": f"Edit Marks: {enrollment.course.name}",
+            "button_text": "Save Marks",
+        },
+    )
+
 
 # 5. DELETE VIEW
-@login_required
+@admin_required
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
-    if request.method == 'POST':
+    if request.method == "POST":
         name = student.name
         student.delete()
         messages.success(request, f"Student '{name}' was deleted.")
-        return redirect('student_app:list')
-        
-    return render(request, 'student_app/student_confirm_delete.html', {'student': student})
+        return redirect("student_app:list")
+
+    return render(
+        request, "student_app/student_confirm_delete.html", {"student": student}
+    )
+
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, "home.html")
