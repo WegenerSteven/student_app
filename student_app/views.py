@@ -1,3 +1,12 @@
+from rest_framework import viewsets, permissions, status, filters
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
+from django.db.models import Avg, Count
+from django_filters.rest_framework import DjangoFilterBackend
+from .serializers import StudentSerializer, CourseSerializer, EnrollmentSerializer
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
@@ -12,7 +21,7 @@ from django.db import transaction
 from django.db.models import Q
 
 from .forms import AdminStudentCreationForm, CustomUserCreationForm, EnrollmentForm
-from .models import Student, Enrollment
+from .models import Student, Enrollment, Course
 
 
 # Authorization helpers
@@ -236,3 +245,69 @@ def student_delete(request, pk):
 
 def home(request):
     return render(request, "home.html")
+
+# ─── DRF AUTHENTICATION ENDPOINTS ───────────────────
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def api_login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(request, username=username, password=password)
+    if user:
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'username': user.username,
+            'is_staff': user.is_staff,
+        })
+    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def api_logout(request):
+    request.user.auth_token.delete()
+    return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
+
+# ─── DRF VIEWSETS ───────────────────────────────────
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class EnrollmentViewSet(viewsets.ModelViewSet):
+    queryset = Enrollment.objects.all()
+    serializer_class = EnrollmentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.select_related('user').all().order_by('-created_at')
+    serializer_class = StudentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['year_of_study', 'is_active']
+    search_fields = ['user__first_name', 'user__last_name', 'user__email', 'admission_number']
+    ordering_fields = ['created_at', 'year_of_study']
+
+    # GET /api/students/stats/
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        total_students = Student.objects.count()
+        avg_marks = Enrollment.objects.aggregate(avg=Avg('marks'))['avg'] or 0
+        pass_count = Enrollment.objects.filter(marks__gte=50).values('student').distinct().count()
+        fail_count = Enrollment.objects.filter(marks__lt=50).values('student').distinct().count()
+
+        return Response({
+            'total_students': total_students,
+            'average_marks': round(avg_marks, 2),
+            'pass_count': pass_count,
+            'fail_count': fail_count,
+        })
+
+    # POST /api/students/{id}/deactivate/
+    @action(detail=True, methods=['post'])
+    def deactivate(self, request, pk=None):
+        student = self.get_object()
+        student.is_active = False
+        student.save()
+        return Response({'status': f'Student {student.admission_number} deactivated'}, status=status.HTTP_200_OK)
