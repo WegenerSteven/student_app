@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
-import os 
+import os
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -58,16 +58,15 @@ ROOT_URLCONF = "studentApp.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.debug',
-                
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.debug",
             ],
         },
     },
@@ -123,13 +122,17 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-#Authentication
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/students/'  # Redirect to student list after login
-LOGOUT_REDIRECT_URL = '/accounts/login/'  # Redirect to login page after logout
+# media
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Authentication
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "/students/"  # Redirect to student list after login
+LOGOUT_REDIRECT_URL = "/accounts/login/"  # Redirect to login page after logout
 
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
