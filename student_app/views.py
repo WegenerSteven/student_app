@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db import transaction
 from django.db.models import Q
 
-from .forms import StudentForm, CustomUserCreationForm, EnrollmentForm
+from .forms import AdminStudentCreationForm, CustomUserCreationForm, EnrollmentForm
 from .models import Student, Enrollment
 
 
@@ -53,7 +53,7 @@ def teacher_or_admin_required(view):
 # REGISTRATION VIEW
 def register(request):
     if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
 
         if form.is_valid():
             with transaction.atomic():
@@ -61,10 +61,13 @@ def register(request):
                 student_group, _ = Group.objects.get_or_create(name="Student")
                 user.groups.add(student_group)
 
-            messages.success(request, "Your account was created successfully.")
+            messages.success(request, f"Registration successful. Your admission number is {user.student_profile.admission_number}")
             return redirect("login")
     else:
-        form = CustomUserCreationForm()
+        form = CustomUserCreationForm(
+            request.POST,
+            request.FILES,
+        )
 
     return render(request, "registration/register.html", {"form": form})
 
@@ -86,6 +89,7 @@ def student_list(request):
             Q(user__first_name__icontains=query)
             | Q(user__last_name__icontains=query)
             | Q(user__email__icontains=query)
+            | Q(admission_number__icontains=query)
         )
 
     return render(
@@ -108,7 +112,7 @@ def student_detail(request, pk):
 
     if is_student(request.user) and student.user_id != request.user.id:
         raise PermissionDenied
-    
+
     enrollments = student.enrollments.select_related("course")
 
     return render(
@@ -124,53 +128,62 @@ def student_detail(request, pk):
 
 
 # 3. CREATE VIEW
-@login_required
+@admin_required
 def student_add(request):
     if request.method == "POST":
-        form = StudentForm(request.POST)
+        form = AdminStudentCreationForm(
+            request.POST,
+            request.FILES,
+        )
 
         if form.is_valid():
             student = form.save()
             messages.success(
-                request, f"Student '{student.name}' was successfully added!"
+                request,
+                f"Student '{student.name}' was added with admission number "
+                f"{student.admission_number}.",
             )
             return redirect("student_app:list")
     else:
-        form = StudentForm()
-
-    return render(
-        request,
-        "student_app/student_form.html",
-        {"form": form, "title": "Add New Student", "button_text": "Save Student"},
-    )
-
-
-# 4. UPDATE VIEW
-@teacher_or_admin_required
-def student_edit(request, pk):
-    student = get_object_or_404(Student.objects.select_related("user"), pk=pk)
-
-    if request.method == "POST":
-        form = StudentForm(request.POST, instance=student)
-        if form.is_valid():
-            form.save()
-            messages.success(
-                request, f"Student '{student.name}' was successfully updated!"
-            )
-            return redirect("student_app:detail", pk=student.pk)
-    else:
-        form = StudentForm(instance=student)
+        form = AdminStudentCreationForm()
 
     return render(
         request,
         "student_app/student_form.html",
         {
             "form": form,
-            "student": student,
-            "title": f"Edit Student: {student.name}",
-            "button_text": "Update Student",
+            "title": "Add New Student",
+            "button_text": "Save Student",
         },
     )
+
+
+# 4. UPDATE VIEW
+# @admin_required
+# def student_edit(request, pk):
+#     student = get_object_or_404(Student.objects.select_related("user"), pk=pk)
+
+#     if request.method == "POST":
+#         form = StudentForm(request.POST, instance=student)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(
+#                 request, f"Student '{student.name}' was successfully updated!"
+#             )
+#             return redirect("student_app:detail", pk=student.pk)
+#     else:
+#         form = StudentForm(instance=student)
+
+#     return render(
+#         request,
+#         "student_app/student_form.html",
+#         {
+#             "form": form,
+#             "student": student,
+#             "title": f"Edit Student: {student.name}",
+#             "button_text": "Update Student",
+#         },
+#     )
 
 
 @teacher_or_admin_required
@@ -184,6 +197,8 @@ def enrollment_edit(request, pk):
         form = EnrollmentForm(request.POST, instance=enrollment)
 
         if form.is_valid():
+            if hasattr(form, "warning"):
+                messages.warning(request, form.warning)
             form.save()
             messages.success(request, "Marks updated successfully.")
             return redirect(
