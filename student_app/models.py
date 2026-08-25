@@ -103,6 +103,47 @@ class Student(models.Model):
     @property
     def email(self):
         return self.user.email
+    
+        # ============================================
+    # OVERALL ACADEMIC PERFORMANCE
+    # ============================================
+
+    @property
+    def average_marks(self):
+
+        enrollments = self.enrollments.all()
+
+        if not enrollments.exists():
+            return 0
+
+        total = sum(
+            enrollment.marks
+            for enrollment in enrollments
+        )
+
+        return round(
+            total / enrollments.count(),
+            1,
+        )
+
+    @property
+    def overall_grade(self):
+
+        average = self.average_marks
+
+        if average >= 80:
+            return "A"
+
+        if average >= 70:
+            return "B"
+
+        if average >= 60:
+            return "C"
+
+        if average >= 50:
+            return "D"
+
+        return "Fail"
 
     def __str__(self):
         return self.name

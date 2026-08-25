@@ -73,10 +73,7 @@ def register(request):
             messages.success(request, f"Registration successful. Your admission number is {user.student_profile.admission_number}")
             return redirect("login")
     else:
-        form = CustomUserCreationForm(
-            request.POST,
-            request.FILES,
-        )
+        form = CustomUserCreationForm()
 
     return render(request, "registration/register.html", {"form": form})
 

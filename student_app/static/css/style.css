@@ -1,66 +1,464 @@
-/* =========================================
+/* =========================================================
+   STUDORA — SHARED LANDING + AUTH STYLES
+   Palette:
+   Burgundy  #6f263d
+   Green     #3f6847
+   Gold      #b08d2c
+   Cream     #f7f4ed
+   Charcoal  #2b2522
+========================================================= */
+
+
+/* =========================================================
    GLOBAL
-========================================= */
+========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    color: #2b2522;
+    background: #ffffff;
+    line-height: 1.6;
+}
+
+a {
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
-/* =========================================
-   REGISTER / AUTH PAGE
-========================================= */
+/* =========================================================
+   STUDORA NAVBAR
+========================================================= */
 
-.register-page,
-.auth-container {
-    min-height: calc(100vh - 70px);
+.studora-nav {
+    height: 74px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    background: #fffdf9;
+
+    border-bottom: 1px solid #ebe4d8;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.studora-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: #2b2522;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    text-decoration: none;
+}
+
+.studora-brand:hover {
+    color: #6f263d;
+}
+
+.studora-brand-mark {
+    width: 39px;
+    height: 39px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding: 40px 20px;
+    border-radius: 11px;
 
-    background: linear-gradient(
-        135deg,
-        #667eea 0%,
-        #764ba2 100%
-    );
+    background: #6f263d;
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 800;
+
+    box-shadow:
+        0 5px 14px rgba(111, 38, 61, 0.18);
+}
+
+.studora-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+
+.studora-nav-links a {
+    color: #5f5752;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.studora-nav-links a:hover {
+    color: #6f263d;
+}
+
+.studora-login-btn {
+    padding: 8px 16px;
+
+    border: 1px solid #d8cec2;
+
+    border-radius: 8px;
+
+    color: #6f263d !important;
+}
+
+.studora-login-btn:hover {
+    background: #f7f1f3;
+
+    border-color: #c7aab4;
+}
+
+.studora-register-btn {
+    padding: 9px 17px;
+
+    border-radius: 8px;
+
+    background: #6f263d;
+    color: #ffffff !important;
+
+    box-shadow:
+        0 5px 14px rgba(111, 38, 61, 0.15);
+}
+
+.studora-register-btn:hover {
+    background: #5b1f32;
+
+    transform: translateY(-1px);
 }
 
 
-/* =========================================
-   CARD
-========================================= */
+/* =========================================================
+   HOME — HERO
+========================================================= */
 
-.register-card,
-.auth-card {
+.studora-hero {
+    min-height: 650px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 80px 7%;
+
+    background: #f7f4ed;
+}
+
+.studora-hero-inner {
     width: 100%;
-    max-width: 450px;
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+
+    align-items: center;
+
+    gap: 70px;
+}
+
+.studora-hero-copy {
+    max-width: 620px;
+}
+
+.studora-eyebrow {
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: 15px;
+
+    padding: 7px 12px;
+
+    border-radius: 30px;
+
+    background: #f1e4e8;
+
+    color: #6f263d;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.studora-hero h1 {
+    margin: 0;
+
+    color: #2b2522;
+
+    font-size: 55px;
+    line-height: 1.08;
+
+    letter-spacing: -1.5px;
+}
+
+.studora-hero h1 span {
+    color: #6f263d;
+}
+
+.studora-hero-description {
+    max-width: 570px;
+
+    margin: 22px 0 30px;
+
+    color: #756d67;
+
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.studora-hero-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.studora-primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 13px 22px;
+
+    border-radius: 9px;
+
+    background: #6f263d;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 20px rgba(111, 38, 61, 0.16);
+}
+
+.studora-primary-btn:hover {
+    background: #5b1f32;
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 11px 24px rgba(111, 38, 61, 0.20);
+}
+
+.studora-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 22px;
+
+    border: 1px solid #d8cec2;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #4e4742;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.studora-secondary-btn:hover {
+    background: #fdfbf7;
+
+    border-color: #bfb3a7;
+
+    color: #6f263d;
+}
+
+
+/* =========================================================
+   HOME — DASHBOARD PREVIEW
+========================================================= */
+
+.studora-dashboard {
+    padding: 25px;
 
     background: #ffffff;
 
-    padding: 40px;
+    border: 1px solid #e5ddd1;
 
-    border-radius: 18px;
+    border-radius: 22px;
 
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+    box-shadow:
+        0 25px 55px rgba(65, 39, 32, 0.12);
 }
 
+.studora-dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-/* =========================================
-   LOGO
-========================================= */
+    margin-bottom: 22px;
+}
 
-.logo {
-    width: 65px;
-    height: 65px;
+.studora-dashboard-header small {
+    color: #928780;
 
-    margin: 0 auto 20px;
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.studora-dashboard-header h3 {
+    margin: 3px 0 0;
+
+    color: #2b2522;
+
+    font-size: 22px;
+}
+
+.studora-dashboard-status {
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    background: #edf5ed;
+
+    color: #3f6847;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.studora-dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+.studora-dashboard-stat {
+    padding: 15px;
+
+    background: #faf8f3;
+
+    border: 1px solid #eee8dd;
+
+    border-radius: 12px;
+}
+
+.studora-dashboard-stat span {
+    display: block;
+
+    color: #928780;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.studora-dashboard-stat strong {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #6f263d;
+
+    font-size: 23px;
+    line-height: 1.2;
+}
+
+.studora-dashboard-performance {
+    margin-top: 14px;
+
+    padding: 18px;
+
+    background: #f5f1e7;
+
+    border-radius: 13px;
+}
+
+.studora-performance-heading {
+    display: flex;
+    justify-content: space-between;
+
+    color: #4a423d;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.studora-performance-heading strong {
+    color: #3f6847;
+}
+
+.studora-performance-bar {
+    height: 8px;
+
+    margin-top: 12px;
+
+    overflow: hidden;
+
+    background: #ddd6c8;
+
+    border-radius: 20px;
+}
+
+.studora-performance-bar div {
+    width: 78%;
+    height: 100%;
+
+    background: #3f6847;
+
+    border-radius: inherit;
+}
+
+.studora-dashboard-students {
+    margin-top: 14px;
+}
+
+.studora-student-row {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eee9e1;
+}
+
+.studora-student-row:last-child {
+    border-bottom: none;
+}
+
+.studora-student-avatar {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
 
     display: flex;
     align-items: center;
@@ -68,271 +466,722 @@ body {
 
     border-radius: 50%;
 
-    background: #667eea;
-    color: #ffffff;
+    background: #f1e4e8;
 
-    font-size: 26px;
-    font-weight: bold;
+    color: #6f263d;
+
+    font-size: 12px;
+    font-weight: 800;
 }
 
-
-/* =========================================
-   HEADINGS
-========================================= */
-
-.register-card h1,
-.auth-card h1 {
-    margin: 0 0 10px;
-
-    text-align: center;
-
-    color: #222222;
-
-    font-size: 28px;
-    font-weight: 700;
+.studora-student-details {
+    flex: 1;
 }
 
-
-/* =========================================
-   SUBTITLE
-========================================= */
-
-.subtitle,
-.auth-subtitle {
-    margin: 0 0 30px;
-
-    text-align: center;
-
-    color: #777777;
-
-    font-size: 14px;
-}
-
-
-/* =========================================
-   FORM GROUP
-========================================= */
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-
-/* =========================================
-   LABEL
-========================================= */
-
-.form-group label {
+.studora-student-details strong {
     display: block;
 
-    margin-bottom: 7px;
-
-    color: #333333;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-
-/* =========================================
-   INPUTS
-========================================= */
-
-.form-group input,
-.form-control {
-    width: 100%;
-
-    padding: 13px 14px;
-
-    border: 1px solid #dddddd;
-    border-radius: 9px;
-
-    background: #ffffff;
-
-    color: #222222;
-
-    font-size: 15px;
-
-    outline: none;
-
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-
-/* =========================================
-   INPUT FOCUS
-========================================= */
-
-.form-group input:focus,
-.form-control:focus {
-    border-color: #667eea;
-
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
-}
-
-
-/* =========================================
-   HELP / WARNING TEXT
-========================================= */
-
-.help-text,
-.field-hint {
-    display: block;
-
-    margin-top: 6px;
-
-    color: #888888;
+    color: #39312d;
 
     font-size: 12px;
 }
 
+.studora-student-details small {
+    display: block;
 
-/* =========================================
-   FIELD ERRORS
-========================================= */
+    margin-top: 2px;
 
-.field-error {
-    margin-top: 6px;
+    color: #928780;
 
-    color: #dc3545;
+    font-size: 10px;
+}
 
-    font-size: 13px;
+.studora-student-grade {
+    padding: 5px 8px;
+
+    border-radius: 7px;
+
+    background: #edf5ed;
+
+    color: #3f6847;
+
+    font-size: 11px;
+    font-weight: 800;
 }
 
 
-/* =========================================
-   FORM ERROR
-========================================= */
+/* =========================================================
+   HOME — FEATURES
+========================================================= */
 
-.form-error {
-    margin-bottom: 20px;
+.studora-features {
+    padding: 90px 7%;
 
-    padding: 12px;
+    background: #ffffff;
+}
 
-    border-radius: 8px;
+.studora-section-title {
+    max-width: 650px;
 
-    background: #fee2e2;
+    margin: 0 auto 48px;
 
-    color: #991b1b;
+    text-align: center;
+}
+
+.studora-section-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #6f263d;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.studora-section-title h2 {
+    margin: 0 0 12px;
+
+    color: #2b2522;
+
+    font-size: 35px;
+    line-height: 1.2;
+}
+
+.studora-section-title p {
+    margin: 0;
+
+    color: #766d67;
+
+    font-size: 15px;
+}
+
+.studora-feature-grid {
+    max-width: 1180px;
+
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+}
+
+.studora-feature-card {
+    padding: 26px 22px;
+
+    background: #fffdf9;
+
+    border: 1px solid #e9e2d8;
+
+    border-radius: 15px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.studora-feature-card:hover {
+    transform: translateY(-5px);
+
+    border-color: #d8cec2;
+
+    box-shadow:
+        0 15px 30px rgba(65, 39, 32, 0.08);
+}
+
+.studora-feature-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 11px;
+
+    font-size: 20px;
+}
+
+.studora-feature-card:nth-child(1) .studora-feature-icon {
+    background: #f1e4e8;
+    color: #6f263d;
+}
+
+.studora-feature-card:nth-child(2) .studora-feature-icon {
+    background: #eaf2eb;
+    color: #3f6847;
+}
+
+.studora-feature-card:nth-child(3) .studora-feature-icon {
+    background: #f7efd8;
+    color: #92701c;
+}
+
+.studora-feature-card:nth-child(4) .studora-feature-icon {
+    background: #f1e4e8;
+    color: #6f263d;
+}
+
+.studora-feature-card h3 {
+    margin: 0 0 8px;
+
+    color: #342c28;
+
+    font-size: 17px;
+}
+
+.studora-feature-card p {
+    margin: 0;
+
+    color: #766d67;
 
     font-size: 13px;
+    line-height: 1.6;
 }
 
 
-/* =========================================
-   REGISTER BUTTON
-========================================= */
+/* =========================================================
+   HOME — HOW IT WORKS
+========================================================= */
 
-.submit-btn,
-.auth-button {
-    width: 100%;
+.studora-how {
+    padding: 90px 7%;
 
-    padding: 13px;
+    background: #f7f4ed;
+}
 
-    border: none;
-    border-radius: 9px;
+.studora-steps {
+    max-width: 1000px;
 
-    background: #667eea;
+    margin: auto;
 
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.studora-step {
+    padding: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7dfd4;
+
+    border-radius: 15px;
+}
+
+.studora-step-number {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 11px;
+
+    background: #6f263d;
     color: #ffffff;
 
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 800;
+}
 
-    cursor: pointer;
+.studora-step h3 {
+    margin: 0 0 8px;
 
-    transition: background 0.2s, transform 0.2s;
+    color: #342c28;
+
+    font-size: 17px;
+}
+
+.studora-step p {
+    margin: 0;
+
+    color: #766d67;
+
+    font-size: 13px;
 }
 
 
-/* =========================================
-   BUTTON HOVER
-========================================= */
+/* =========================================================
+   HOME — CTA
+========================================================= */
 
-.submit-btn:hover,
-.auth-button:hover {
-    background: #5568d9;
-
-    transform: translateY(-1px);
-}
-
-
-/* =========================================
-   LOGIN / AUTH FOOTER
-========================================= */
-
-.login-link,
-.auth-footer {
-    margin-top: 25px;
-    margin-bottom: 0;
+.studora-cta {
+    padding: 90px 7%;
 
     text-align: center;
 
-    color: #777777;
+    background: #ffffff;
+}
 
-    font-size: 14px;
+.studora-cta-box {
+    max-width: 850px;
+
+    margin: auto;
+
+    padding: 55px 30px;
+
+    background: #f5f1e7;
+
+    border: 1px solid #e6ddcf;
+
+    border-radius: 20px;
+}
+
+.studora-cta-box h2 {
+    margin: 0 0 10px;
+
+    color: #2b2522;
+
+    font-size: 35px;
+}
+
+.studora-cta-box p {
+    margin: 0 0 25px;
+
+    color: #766d67;
+
+    font-size: 15px;
 }
 
 
-/* =========================================
-   LINKS
-========================================= */
+/* =========================================================
+   HOME — FOOTER
+========================================================= */
 
-.login-link a,
-.auth-footer a {
-    color: #667eea;
+.studora-footer {
+    padding: 42px 7%;
 
-    font-weight: 600;
+    background: #2b2522;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.studora-footer-brand strong {
+    font-size: 18px;
+}
+
+.studora-footer-brand p {
+    margin: 3px 0 0;
+
+    color: #bdb4ae;
+
+    font-size: 12px;
+}
+
+.studora-footer-links {
+    display: flex;
+    gap: 22px;
+}
+
+.studora-footer-links a {
+    color: #d8d0ca;
+
+    text-decoration: none;
+
+    font-size: 12px;
+}
+
+.studora-footer-links a:hover {
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   AUTH / REGISTER
+========================================================= */
+
+.register-page,
+.auth-container {
+    min-height: calc(100vh - 74px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 50px 20px;
+
+    background: #f7f4ed;
+}
+
+.register-card,
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+
+    padding: 42px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8e2d7;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 18px 45px rgba(65, 39, 32, 0.10);
+}
+
+.register-card .logo,
+.auth-card .logo {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: #6f263d;
+    color: #ffffff;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 20px rgba(111, 38, 61, 0.20);
+}
+
+.register-card h1,
+.auth-card h1 {
+    margin: 0 0 8px;
+
+    text-align: center;
+
+    color: #2b2522;
+
+    font-size: 29px;
+    font-weight: 800;
+}
+
+.register-card .subtitle,
+.auth-card .auth-subtitle {
+    margin: 0 0 30px;
+
+    text-align: center;
+
+    color: #7a716c;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.register-card .form-group,
+.auth-card .form-group {
+    margin-bottom: 19px;
+}
+
+.register-card .form-group label,
+.auth-card .form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #3d3531;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.register-card .form-control,
+.register-card .form-group input,
+.auth-card .form-control,
+.auth-card .form-group input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid #ddd6ca;
+
+    border-radius: 10px;
+
+    background: #fffdf9;
+
+    color: #2b2522;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.register-card .form-control:focus,
+.register-card .form-group input:focus,
+.auth-card .form-control:focus,
+.auth-card .form-group input:focus {
+    border-color: #6f263d;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(111, 38, 61, 0.10);
+}
+
+.register-card .help-text,
+.auth-card .help-text {
+    display: block;
+
+    margin-top: 6px;
+
+    color: #918780;
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.register-card .field-error,
+.auth-card .field-error {
+    margin-top: 6px;
+
+    color: #b42318;
+
+    font-size: 12px;
+}
+
+.register-card .submit-btn,
+.auth-card .auth-button {
+    width: 100%;
+
+    margin-top: 8px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #6f263d;
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.register-card .submit-btn:hover,
+.auth-card .auth-button:hover {
+    background: #5b1f32;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(111, 38, 61, 0.18);
+}
+
+.register-card .login-link,
+.auth-card .auth-footer {
+    margin: 24px 0 0;
+
+    text-align: center;
+
+    color: #7a716c;
+
+    font-size: 13px;
+}
+
+.register-card .login-link a,
+.auth-card .auth-footer a {
+    color: #3f6847;
+
+    font-weight: 700;
 
     text-decoration: none;
 }
 
-.login-link a:hover,
-.auth-footer a:hover {
+.register-card .login-link a:hover,
+.auth-card .auth-footer a:hover {
+    color: #6f263d;
+
     text-decoration: underline;
 }
 
 
-/* =========================================
-   SUCCESS MESSAGES
-========================================= */
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-.messages {
-    margin-bottom: 20px;
+@media (max-width: 1000px) {
+
+    .studora-hero-inner {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+    }
+
+    .studora-hero-copy {
+        max-width: 700px;
+        margin: auto;
+
+        text-align: center;
+    }
+
+    .studora-hero-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .studora-hero-buttons {
+        justify-content: center;
+    }
+
+    .studora-dashboard {
+        max-width: 620px;
+        width: 100%;
+
+        margin: auto;
+    }
+
+    .studora-feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.message {
-    padding: 12px;
 
-    border-radius: 8px;
+@media (max-width: 700px) {
 
-    background: #d4edda;
+    .studora-nav {
+        padding: 0 5%;
+    }
 
-    color: #155724;
+    .studora-nav-links {
+        gap: 8px;
+    }
 
-    font-size: 14px;
+    .studora-nav-links > a:not(.studora-login-btn):not(.studora-register-btn) {
+        display: none;
+    }
+
+    .studora-hero {
+        min-height: auto;
+
+        padding: 65px 5%;
+    }
+
+    .studora-hero h1 {
+        font-size: 42px;
+    }
+
+    .studora-hero-description {
+        font-size: 15px;
+    }
+
+    .studora-feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .studora-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .studora-features,
+    .studora-how,
+    .studora-cta {
+        padding: 65px 5%;
+    }
+
+    .studora-section-title h2,
+    .studora-cta-box h2 {
+        font-size: 29px;
+    }
+
+    .studora-footer {
+        flex-direction: column;
+
+        gap: 20px;
+
+        text-align: center;
+    }
+
+    .studora-footer-links {
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
+@media (max-width: 500px) {
 
-@media (max-width: 576px) {
+    .studora-brand {
+        font-size: 17px;
+    }
+
+    .studora-brand-mark {
+        width: 35px;
+        height: 35px;
+    }
+
+    .studora-register-btn {
+        padding: 8px 12px;
+    }
+
+    .studora-login-btn {
+        padding: 7px 11px;
+    }
+
+    .studora-hero h1 {
+        font-size: 36px;
+    }
+
+    .studora-hero-buttons {
+        flex-direction: column;
+
+        width: 100%;
+    }
+
+    .studora-primary-btn,
+    .studora-secondary-btn {
+        width: 190px;
+    }
+
+    .studora-dashboard-stats {
+        grid-template-columns: 1fr;
+    }
 
     .register-page,
     .auth-container {
-        padding: 25px 15px;
+        padding: 30px 15px;
     }
 
     .register-card,
     .auth-card {
         padding: 30px 22px;
+
+        border-radius: 16px;
     }
 
     .register-card h1,
     .auth-card h1 {
-        font-size: 24px;
+        font-size: 25px;
     }
-
 }
