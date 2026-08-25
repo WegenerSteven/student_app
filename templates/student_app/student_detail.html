@@ -374,11 +374,13 @@ Profile{% endblock %} {% block content %}
         <td>{{ enrollment.grade }}</td>
 
         {% if can_edit_marks %}
+        {%for enrollment in enrollments%}
         <td>
           <a href="{% url 'student_app:enrollment_edit' enrollment.pk %}">
-            Edit Marks
+            Edit {{ enrollment.course.code }} Marks 
           </a>
         </td>
+        {% endfor %}
         {% endif %}
       </tr>
       {% endfor %}

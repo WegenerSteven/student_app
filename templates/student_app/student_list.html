@@ -1,5 +1,4 @@
-{% extends 'base.html' %} {% block title %}Student List{% endblock %} {% block
-content %}
+{% extends 'base.html' %} {% block title %}Student List{% endblock %} {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h2>Student Directory</h2>
   {%if can_add%}
@@ -18,7 +17,7 @@ content %}
       placeholder="Search by name or email..."
       value="{{ query }}"
     />
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
+    <button class="btn btn-outline-secondary" type="submit" placeholder="Search by name or email or admission number">Search</button>
     {% if query %}
     <a href="{% url 'student_app:list' %}" class="btn btn-outline-danger"
       >Clear</a
@@ -45,12 +44,16 @@ content %}
         <td class="fw-bold">{{ student.name }}</td>
         <td>{{ student.email }}</td>
         <td>{{ student.phone|default:"N/A" }}</td>
-        <td>{{ student.marks }}%</td>
+        <td>
+          {% for enrollment in student.enrollments.all %} 
+          {{ enrollment.course.code }}: {{ enrollment.marks }}% {% empty %} N/A
+          {% endfor %}
+        </td>
         <td>
           <span
             class="badge {% if student.grade == 'A' %}bg-success{% elif student.grade == 'Fail' %}bg-danger{% else %}bg-primary{% endif %}"
           >
-            {{ student.grade }}
+            {% for enrollment in student.enrollments.all %} {{ enrollment.grade}} {% empty %} N/A {% endfor %}
           </span>
         </td>
         <td>
@@ -59,11 +62,18 @@ content %}
             class="btn btn-sm btn-info text-white"
             >View</a
           >
-          <a
-            href="{% url 'student_app:edit' student.pk %}"
+          {% if user.is_staff or user.is_superuser %}
+          {% if can_edit_marks %}
+           {% for enrollment in student.enrollments.all %}
+        <a
+            href="{% url 'student_app:enrollment_edit' enrollment.pk %}"
             class="btn btn-sm btn-warning"
-            >Edit</a
-          >
+        >
+            Edit {{ enrollment.course.code }} Marks
+        </a>
+    {% endfor %}
+{% endif %}
+          {% endif %}
           {% if can_delete %}
           <a
             href="{% url 'student_app:delete' student.pk %}"
