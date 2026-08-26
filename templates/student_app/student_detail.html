@@ -1,391 +1,1240 @@
-{% extends 'base.html' %} {% block title %}{{ student.name }} - Student
-Profile{% endblock %} {% block content %}
+{% extends 'base.html' %}
+
+{% block title %}{{ student.name }} Studora - Student Profile{% endblock %}
+
+{% block content %}
 
 <style>
-  .profile-wrapper {
-    max-width: 1000px;
-    margin: 40px auto;
-  }
+    /* =====================================================
+       STUDENT PROFILE — BURGUNDY / GREEN / GOLD
+    ===================================================== */
 
-  .profile-header {
-    background: linear-gradient(135deg, #111827, #2563eb);
-    border-radius: 18px;
-    padding: 40px;
-    color: white;
+    .student-profile-page {
+        max-width: 1050px;
+        margin: 30px auto 60px;
+        padding: 0 18px;
+    }
+
+    /* =====================================================
+       BACK BUTTON
+    ===================================================== */
+
+    .student-profile-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 20px;
+        color: #7f1d3b;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+        transition: 0.2s ease;
+    }
+
+    .student-profile-back:hover {
+        color: #5f1730;
+        transform: translateX(-3px);
+    }
+
+
+    /* =====================================================
+       PROFILE HERO
+    ===================================================== */
+
+    .student-profile-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 34px;
+        border-radius: 22px;
+
+        /* NO GRADIENT */
+        background: #641f3a;
+
+        color: white;
+
+        box-shadow:
+            0 20px 45px rgba(71, 24, 43, 0.18);
+
+        border: 1px solid #7f294a;
+    }
+
+    /* Decorative shapes */
+    .student-profile-hero::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        right: -120px;
+        top: -150px;
+        border-radius: 50%;
+        background: rgba(194, 154, 61, 0.16);
+    }
+
+    .student-profile-hero::after {
+        content: "";
+        position: absolute;
+        width: 170px;
+        height: 170px;
+        left: 48%;
+        bottom: -125px;
+        border-radius: 50%;
+        background: rgba(38, 91, 66, 0.25);
+    }
+
+    .student-profile-hero-content {
+        position: relative;
+        z-index: 2;
+
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+
+    /* =====================================================
+       AVATAR
+    ===================================================== */
+
+    .student-avatar {
+        width: 90px;
+        height: 90px;
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: #fffdf7;
+        color: #641f3a;
+
+        font-size: 32px;
+        font-weight: 800;
+
+        border: 4px solid #d6b65c;
+
+        box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.20);
+
+        overflow: hidden;
+    }
+
+    .student-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    /* =====================================================
+       HERO TEXT
+    ===================================================== */
+
+    .student-hero-info {
+        min-width: 0;
+    }
+
+    .student-hero-info h1 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 750;
+        letter-spacing: -0.5px;
+    }
+
+    .student-hero-subtitle {
+        margin: 5px 0 14px;
+        color: rgba(255, 255, 255, 0.76);
+        font-size: 14px;
+    }
+
+
+    /* =====================================================
+       ADMISSION BADGE
+    ===================================================== */
+
+    .admission-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 8px 14px;
+
+        border-radius: 30px;
+
+        background: rgba(214, 182, 92, 0.14);
+        border: 1px solid rgba(214, 182, 92, 0.45);
+
+        color: #f5dda0;
+
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .student-status {
+        margin-left: auto;
+        align-self: flex-start;
+
+        padding: 7px 13px;
+
+        border-radius: 30px;
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .student-status.active {
+        background: rgba(39, 110, 75, 0.30);
+        color: #d4f0df;
+        border: 1px solid rgba(173, 225, 193, 0.28);
+    }
+
+    .student-status.inactive {
+        background: rgba(160, 45, 45, 0.25);
+        color: #ffd4d4;
+        border: 1px solid rgba(255, 190, 190, 0.25);
+    }
+
+
+    /* =====================================================
+       STATISTICS
+    ===================================================== */
+
+    .student-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .student-stat-card {
+        position: relative;
+
+        padding: 22px;
+
+        background: #ffffff;
+
+        border: 1px solid #e7e1d7;
+        border-radius: 16px;
+
+        box-shadow:
+            0 8px 25px rgba(48, 38, 31, 0.06);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .student-stat-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 14px;
+        bottom: 14px;
+        width: 4px;
+        border-radius: 0 4px 4px 0;
+        background: #7f1d3b;
+    }
+
+    .student-stat-card:nth-child(2)::before {
+        background: #28704c;
+    }
+
+    .student-stat-card:nth-child(3)::before {
+        background: #c39a3b;
+    }
+
+    .student-stat-card:hover {
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 14px 30px rgba(48, 38, 31, 0.10);
+    }
+
+    .student-stat-label {
+        margin-bottom: 7px;
+
+        color: #756f68;
+
+        font-size: 12px;
+        font-weight: 600;
+
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .student-stat-value {
+        color: #292522;
+        font-size: 27px;
+        font-weight: 800;
+    }
+
+    .student-stat-value.purple {
+        color: #7f1d3b;
+    }
+
+    .student-stat-value.green {
+        color: #28704c;
+    }
+
+    .student-stat-value.orange {
+        color: #b48625;
+    }
+
+
+    /* =====================================================
+       GENERAL CARDS
+    ===================================================== */
+
+    .student-info-card {
+        margin-top: 20px;
+        padding: 26px;
+
+        background: #ffffff;
+
+        border: 1px solid #e7e1d7;
+        border-radius: 18px;
+
+        box-shadow:
+            0 8px 25px rgba(48, 38, 31, 0.05);
+    }
+
+    .student-section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 20px;
+    }
+
+    .student-section-heading h2 {
+        margin: 0;
+
+        color: #332d29;
+
+        font-size: 19px;
+        font-weight: 750;
+    }
+
+    .student-section-heading p {
+        margin: 4px 0 0;
+
+        color: #817a72;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================================================
+       INFORMATION GRID
+    ===================================================== */
+
+    .student-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .student-info-item {
+        padding: 17px;
+
+        border-radius: 12px;
+
+        background: #faf8f3;
+        border: 1px solid #eee8dd;
+
+        transition:
+            background 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .student-info-item:hover {
+        background: #fffdf8;
+        border-color: #dfd1b4;
+    }
+
+    .student-info-label {
+        display: block;
+        margin-bottom: 5px;
+
+        color: #958b80;
+
+        font-size: 11px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .student-info-value {
+        display: block;
+
+        color: #302b27;
+
+        font-size: 14px;
+        font-weight: 650;
+
+        word-break: break-word;
+    }
+
+    .student-info-value.highlight {
+        color: #7f1d3b;
+        font-size: 16px;
+    }
+
+
+    /* =====================================================
+       ACADEMIC SUMMARY
+    ===================================================== */
+
+    .academic-summary {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 16px;
+    }
+
+
+    /* =====================================================
+       PERFORMANCE CARD
+    ===================================================== */
+
+    .performance-card {
+        padding: 22px;
+
+        border-radius: 15px;
+
+        /* NO GRADIENT */
+        background: #f6f2e7;
+
+        border: 1px solid #e5d9bb;
+    }
+
+    .performance-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .performance-title {
+        color: #756b5f;
+
+        font-size: 12px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .performance-number {
+        margin-top: 5px;
+
+        color: #7f1d3b;
+
+        font-size: 40px;
+        font-weight: 800;
+    }
+
+    .performance-number span {
+        font-size: 19px;
+        font-weight: 600;
+    }
+
+
+    /* =====================================================
+       PROGRESS
+    ===================================================== */
+
+    .student-progress {
+        height: 9px;
+        margin-top: 15px;
+
+        overflow: hidden;
+
+        border-radius: 20px;
+
+        background: #e2ddd2;
+    }
+
+    .student-progress-bar {
+        height: 100%;
+
+        border-radius: 20px;
+
+        /* NO GRADIENT */
+        background: #28704c;
+    }
+
+
+    /* =====================================================
+       OVERALL GRADE
+    ===================================================== */
+
+    .overall-grade-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        padding: 22px;
+
+        border-radius: 15px;
+
+        background: #ffffff;
+
+        border: 1px solid #e7e1d7;
+
+        box-shadow:
+            inset 0 4px 0 #d6b65c;
+    }
+
+    .overall-grade-letter {
+        color: #7f1d3b;
+
+        font-size: 52px;
+        font-weight: 850;
+
+        line-height: 1;
+    }
+
+    .overall-grade-label {
+        margin-top: 8px;
+
+        color: #756f68;
+
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+   ```css
+/* =====================================================
+   COURSES — REFINED ACADEMIC CARDS
+===================================================== */
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.course-card {
     position: relative;
     overflow: hidden;
-  }
 
-  .profile-header::after {
+    padding: 21px 21px 18px;
+
+    border: 1px solid #e5ded3;
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 5px 18px rgba(48, 38, 31, 0.045);
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+}
+
+/* Burgundy accent */
+.course-card::before {
     content: "";
-    position: absolute;
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    right: -60px;
-    top: -70px;
-  }
 
-  .profile-top {
-    display: flex;
-    align-items: center;
-    gap: 25px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 4px;
+
+    background: #7f1d3b;
+}
+
+/* Small gold detail in the corner */
+.course-card::after {
+    content: "";
+
+    position: absolute;
+    width: 65px;
+    height: 65px;
+
+    right: -32px;
+    top: -32px;
+
+    border-radius: 50%;
+
+    background: #f4e8c9;
+}
+
+.course-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #d8c9aa;
+
+    box-shadow:
+        0 14px 30px rgba(48, 38, 31, 0.10);
+}
+
+
+/* =====================================================
+   COURSE TOP
+===================================================== */
+
+.course-top {
     position: relative;
     z-index: 2;
-  }
 
-  .avatar {
-    width: 95px;
-    height: 95px;
-    border-radius: 50%;
-    background: white;
-    color: #2563eb;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 18px;
+}
+
+
+/* =====================================================
+   COURSE INFORMATION
+===================================================== */
+
+.course-code {
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: 9px;
+    padding: 5px 10px;
+
+    border-radius: 7px;
+
+    background: #f5ead0;
+    border: 1px solid #ead9ae;
+
+    color: #795a17;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.course-name {
+    margin: 0;
+
+    color: #302b27;
+
+    font-size: 17px;
+    font-weight: 750;
+
+    line-height: 1.3;
+}
+
+.course-description {
+    margin: 7px 0 0;
+
+    color: #777067;
+
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+
+/* =====================================================
+   GRADE BADGE
+===================================================== */
+
+.course-grade {
+    position: relative;
+    z-index: 3;
+
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
-    font-weight: 700;
+
     flex-shrink: 0;
-  }
 
-  .profile-name h1 {
-    margin: 0;
-    font-size: 32px;
-    font-weight: 700;
-  }
+    border-radius: 14px;
 
-  .profile-name p {
-    margin: 5px 0 0;
-    opacity: 0.8;
-  }
+    background: #eaf4ed;
+    border: 1px solid #cde2d4;
 
-  .grade-badge {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 7px 15px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-  }
+    color: #28704c;
 
-  .back-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    color: #374151;
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .back-link:hover {
-    color: #2563eb;
-  }
-
-  .info-card {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    margin-top: 25px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
-  }
-
-  .section-title {
     font-size: 18px;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 25px;
-  }
+    font-weight: 850;
 
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-  }
+    box-shadow:
+        0 4px 10px rgba(40, 112, 76, 0.08);
+}
+/* ===================================================== 
+STUDENT INFORMATION DROPDOWN 
+===================================================== */ 
+.student-info-dropdown { padding: 0; overflow: hidden; } /* Remove the default browser triangle */ 
+.student-info-dropdown summary { 
+    list-style: none; cursor: pointer; 
+    padding: 22px 26px; 
+    margin: 0; user-select: none;
+     transition: background 0.2s ease; }
+      .student-info-dropdown summary::-webkit-details-marker { display: none; } /* Firefox */ 
+      .student-info-dropdown summary::marker { display: none; } .student-info-dropdown summary:hover { background: #faf8f3; } /* ===================================================== HEADER ===================================================== */ .student-info-dropdown .student-section-heading { margin-bottom: 0; } .student-info-dropdown summary { display: flex; align-items: center; justify-content: space-between; } .info-dropdown-icon { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 50%; background: #f5ead0; border: 1px solid #ead9ae; color: #7f1d3b; font-size: 20px; font-weight: 800; transition: transform 0.25s ease, background 0.2s ease; } /* ===================================================== OPEN STATE ===================================================== */ .student-info-dropdown[open] .info-dropdown-icon { transform: rotate(180deg); background: #7f1d3b; color: #ffffff; } /* ===================================================== CONTENT ===================================================== */ .student-info-dropdown-content { padding: 0 26px 26px; animation: studentInfoOpen 0.2s ease; } @keyframes studentInfoOpen { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } } /* ===================================================== MOBILE ===================================================== */ @media (max-width: 480px) { .student-info-dropdown summary { padding: 20px; } .student-info-dropdown-content { padding: 0 20px 20px; } .info-dropdown-icon { width: 30px; height: 30px; font-size: 18px; } 
+}
 
-  .info-item {
-    padding: 18px;
-    background: #f8fafc;
-    border-radius: 10px;
-  }
+/* =====================================================
+   COURSE FOOTER
+===================================================== */
 
-  .info-label {
-    display: block;
-    color: #6b7280;
-    font-size: 13px;
-    margin-bottom: 5px;
-  }
+.course-bottom {
+    position: relative;
+    z-index: 2;
 
-  .info-value {
-    color: #111827;
-    font-size: 16px;
-    font-weight: 600;
-    word-break: break-word;
-  }
-
-  .academic-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-  }
-
-  .performance-box {
-    padding: 25px;
-    background: #f8fafc;
-    border-radius: 12px;
-  }
-
-  .performance-number {
-    font-size: 42px;
-    font-weight: 700;
-    color: #2563eb;
-  }
-
-  .performance-label {
-    color: #6b7280;
-    font-size: 14px;
-  }
-
-  .progress {
-    height: 10px;
-    margin-top: 15px;
-    border-radius: 20px;
-    background: #e5e7eb;
-  }
-
-  .progress-bar {
-    border-radius: 20px;
-    background: #2563eb;
-  }
-
-  .grade-box {
-    padding: 25px;
-    border-radius: 12px;
-    background: #eff6ff;
-    text-align: center;
-  }
-
-  .grade-letter {
-    font-size: 52px;
-    font-weight: 800;
-    color: #2563eb;
-  }
-
-  .grade-description {
-    color: #6b7280;
-    font-size: 14px;
-  }
-
-  .actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 25px;
-  }
+    align-items: center;
+    justify-content: space-between;
 
-  .btn-edit {
-    background: #f59e0b;
-    color: white;
-    border: none;
-  }
+    margin-top: 19px;
+    padding-top: 15px;
 
-  .btn-edit:hover {
-    background: #d97706;
-    color: white;
-  }
+    border-top: 1px solid #eee9e1;
+}
 
-  .btn-delete {
-    background: #dc2626;
-    color: white;
-    border: none;
-  }
 
-  .btn-delete:hover {
-    background: #b91c1c;
-    color: white;
-  }
+/* =====================================================
+   MARKS
+===================================================== */
 
-  @media (max-width: 700px) {
-    .profile-wrapper {
-      margin: 20px auto;
+.course-marks {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+
+    color: #7f1d3b;
+
+    font-size: 24px;
+    font-weight: 850;
+
+    line-height: 1;
+}
+
+.course-marks span {
+    color: #958c82;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+
+/* =====================================================
+   EDIT MARKS BUTTON
+===================================================== */
+
+.course-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 9px 14px;
+
+    border-radius: 9px;
+
+    background: #7f1d3b;
+    border: 1px solid #7f1d3b;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 0.15px;
+
+    box-shadow:
+        0 4px 10px rgba(127, 29, 59, 0.16);
+
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.course-edit::before {
+    content: "✎";
+
+    font-size: 13px;
+    line-height: 1;
+}
+
+.course-edit:hover {
+    background: #64172f;
+    border-color: #64172f;
+
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 7px 15px rgba(127, 29, 59, 0.23);
+}
+
+.course-edit:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   EMPTY COURSES
+===================================================== */
+
+.no-courses {
+    padding: 38px;
+
+    text-align: center;
+
+    border-radius: 14px;
+
+    background: #faf8f3;
+
+    border: 1px dashed #d9d0c3;
+
+    color: #756f68;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+    .course-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .course-card {
+        padding: 18px 17px 16px;
     }
 
-    .profile-header {
-      padding: 25px;
+    .course-name {
+        font-size: 16px;
     }
 
-    .profile-top {
-      flex-direction: column;
-      text-align: center;
+    .course-grade {
+        min-width: 44px;
+        width: 44px;
+        height: 44px;
     }
 
-    .profile-name h1 {
-      font-size: 25px;
+    .course-marks {
+        font-size: 21px;
     }
 
-    .info-grid,
-    .academic-grid {
-      grid-template-columns: 1fr;
+    .course-edit {
+        padding: 8px 11px;
     }
+}
 
-    .actions {
-      flex-direction: column;
-    }
-
-    .actions a,
-    .actions form,
-    .actions button {
-      width: 100%;
-    }
-  }
 </style>
 
-<div class="profile-wrapper">
-  <!-- BACK -->
-  <a href="{% url 'student_app:list' %}" class="back-link">
-    ← Back to Students
-  </a>
+<div class="student-profile-page">
 
-  <!-- PROFILE HEADER -->
-  <div class="profile-header">
-    <div class="profile-top">
-      <!-- INITIALS -->
-      <div class="avatar">{{ student.name|slice:":1"|upper }}</div>
+    <!-- BACK -->
 
-      <div class="profile-name">
-        <h1>{{ student.name }}</h1>
+    <a
+        href="{% url 'student_app:list' %}"
+        class="student-profile-back"
+    >
+        ← Back 
+    </a>
 
-        <p>Student Profile</p>
 
-        <span class="grade-badge"> Grade {{ student.grade }} </span>
-      </div>
-    </div>
-  </div>
+    <!-- =================================================
+         PROFILE HERO
+    ================================================== -->
 
-  <!-- CONTACT INFORMATION -->
-  <div class="info-card">
-    <div class="section-title">Contact Information</div>
+    <div class="student-profile-hero">
 
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="info-label"> Email Address </span>
+        <div class="student-profile-hero-content">
 
-        <span class="info-value"> {{ student.email }} </span>
-      </div>
+            <!-- PHOTO / INITIAL -->
 
-      <div class="info-item">
-        <span class="info-label"> Phone Number </span>
+            <div class="student-avatar">
 
-        <span class="info-value">
-          {{ student.phone|default:"Not Provided" }}
-        </span>
-      </div>
-    </div>
-  </div>
+                {% if student.profile_photo %}
+                    <img
+                        src="{{ student.profile_photo.url }}"
+                        alt="{{ student.name }}"
+                    >
+                {% else %}
+                    {{ student.name|slice:":1"|upper }}
+                {% endif %}
 
-  <!-- ACADEMIC PERFORMANCE -->
-  <div class="info-card">
-    <div class="section-title">Academic Performance</div>
+            </div>
 
-    <div class="academic-grid">
-      <!-- MARKS -->
-      <div class="performance-box">
-        <div class="performance-number">{{ student.marks }}%</div>
 
-        <div class="performance-label">Overall Marks</div>
+            <!-- STUDENT NAME -->
 
-        <div class="progress">
-          <div
-            class="progress-bar"
-            role="progressbar"
-            style="width: {{ student.marks }}%;"
-            aria-valuenow="{{ student.marks }}"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          ></div>
+            <div class="student-hero-info">
+
+                <h1>
+                    {{ student.name }}
+                </h1>
+
+                <p class="student-hero-subtitle">
+                    Student Profile
+                    · Year {{ student.year_of_study }}
+                </p>
+
+                <!-- CORRECT STUDENT NUMBER -->
+
+                <div class="admission-badge">
+                    🎓
+                    {{ student.admission_number }}
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            {% if student.is_active %}
+
+                <div class="student-status active">
+                    ● Active Student
+                </div>
+
+            {% else %}
+
+                <div class="student-status inactive">
+                    ● Inactive Student
+                </div>
+
+            {% endif %}
+
         </div>
-      </div>
 
-      <!-- GRADE -->
-      <div class="grade-box">
-        <div class="grade-letter">{{ student.grade }}</div>
-
-        <div class="grade-description">Overall Grade</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- STUDENT INFORMATION -->
-  <div class="info-card">
-    <div class="section-title">Student Information</div>
-
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="info-label"> Student ID </span>
-
-        <span class="info-value"> #{{ student.pk }} </span>
-      </div>
-
-      <div class="info-item">
-        <span class="info-label"> Registered On </span>
-
-        <span class="info-value"> {{ student.created_at|date:"F d, Y" }} </span>
-      </div>
     </div>
 
-    {% comment %}
-    <!-- ACTIONS -->
-    <div class="actions">
-      <a
-        href="{% url 'student_app:edit' student.pk %}"
-        class="btn btn-edit px-4 py-2"
-      >
-        Edit Student
-      </a>
 
-      <a
-        href="{% url 'student_app:delete' student.pk %}"
-        class="btn btn-delete px-4 py-2"
-      >
-        Delete Student
-      </a>
+    <!-- =================================================
+         STATISTICS
+    ================================================== -->
+
+    <div class="student-stat-grid">
+
+        <div class="student-stat-card">
+
+            <div class="student-stat-label">
+                Courses
+            </div>
+
+            <div class="student-stat-value purple">
+                {{ enrollments|length }}
+            </div>
+
+        </div>
+
+
+        <div class="student-stat-card">
+
+            <div class="student-stat-label">
+                Average Marks
+            </div>
+
+            <div class="student-stat-value green">
+                {{ student.average_marks }}%
+            </div>
+
+        </div>
+
+
+        <div class="student-stat-card">
+
+            <div class="student-stat-label">
+                Overall Grade
+            </div>
+
+            <div class="student-stat-value orange">
+                {{ student.overall_grade }}
+            </div>
+
+        </div>
+
     </div>
-    {% endcomment %}
-  </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Course</th>
-        <th>Marks</th>
-        <th>Grade</th>
-        {% if can_edit_marks %}
-        <th>Action</th>
+
+<!-- =================================================
+     STUDENT INFORMATION — COLLAPSIBLE
+================================================== -->
+
+<details class="student-info-card student-info-dropdown">
+    <summary class="student-section-heading">
+        <div>
+            <h2>Student Information</h2>
+            <p>Personal and academic details</p>
+        </div>
+
+        <span class="info-dropdown-icon">⌄</span>
+    </summary>
+
+    <div class="student-info-dropdown-content">
+
+        <div class="student-info-grid">
+
+            <div class="student-info-item">
+                <span class="student-info-label">
+                    Student No.
+                </span>
+
+                <span class="student-info-value highlight">
+                    {{ student.admission_number }}
+                </span>
+            </div>
+
+
+            <div class="student-info-item">
+                <span class="student-info-label">
+                    Student ID
+                </span>
+
+                <span class="student-info-value">
+                    #{{ student.pk }}
+                </span>
+            </div>
+
+
+            <div class="student-info-item">
+                <span class="student-info-label">
+                    Email Address
+                </span>
+
+                <span class="student-info-value">
+                    {{ student.email|default:"Not Provided" }}
+                </span>
+            </div>
+
+
+            <div class="student-info-item">
+                <span class="student-info-label">
+                    Phone Number
+                </span>
+
+                <span class="student-info-value">
+                    {{ student.phone|default:"Not Provided" }}
+                </span>
+            </div>
+
+
+            <div class="student-info-item">
+                <span class="student-info-label">
+                    Year of Study
+                </span>
+
+                <span class="student-info-value">
+                    Year {{ student.year_of_study }}
+                </span>
+            </div>
+
+
+            <div class="student-info-item">
+                <span class="student-info-label">
+                    Registered On
+                </span>
+
+                <span class="student-info-value">
+                    {{ student.created_at|date:"F d, Y" }}
+                </span>
+            </div>
+
+        </div>
+    </div>
+</details>
+     <!-- =================================================
+         COURSES
+    ================================================== -->
+
+    <div class="student-info-card">
+
+        <div class="student-section-heading">
+
+            <div>
+                <h2>Courses</h2>
+
+                <p>
+                    Courses and individual results
+                </p>
+            </div>
+
+        </div>
+
+
+        {% if enrollments %}
+
+            <div class="course-grid">
+
+                {% for enrollment in enrollments %}
+
+                    <div class="course-card">
+
+                        <div class="course-top">
+
+                            <div>
+
+                                <span class="course-code">
+                                    {{ enrollment.course.code }}
+                                </span>
+
+                                <h3 class="course-name">
+                                    {{ enrollment.course.name }}
+                                </h3>
+
+                                {% if enrollment.course.description %}
+                                    <p class="course-description">
+                                        {{ enrollment.course.description }}
+                                    </p>
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="course-grade">
+                                {{ enrollment.grade }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="course-bottom">
+
+                            <div class="course-marks">
+                                {{ enrollment.marks }}%
+                                <span>marks</span>
+                            </div>
+
+
+                            {% if can_edit_marks %}
+
+                                <a
+                                    href="{% url 'student_app:enrollment_edit' enrollment.pk %}"
+                                    class="course-edit"
+                                >
+                                    Edit Marks
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="no-courses">
+                No courses have been assigned to this student yet.
+            </div>
+
         {% endif %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for enrollment in enrollments %}
-      <tr>
-        <td>{{ enrollment.course.code }} - {{ enrollment.course.name }}</td>
-        <td>{{ enrollment.marks }}%</td>
-        <td>{{ enrollment.grade }}</td>
 
-        {% if can_edit_marks %}
-        {%for enrollment in enrollments%}
-        <td>
-          <a href="{% url 'student_app:enrollment_edit' enrollment.pk %}">
-            Edit {{ enrollment.course.code }} Marks 
-          </a>
-        </td>
-        {% endfor %}
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    </div>
+
+
+
+
+
+    <!-- =================================================
+         ACADEMIC PERFORMANCE
+    ================================================== -->
+
+    <div class="student-info-card">
+
+        <div class="student-section-heading">
+
+            <div>
+                <h2>Academic Performance</h2>
+
+                <p>
+                    Overall academic performance
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="academic-summary">
+
+
+            <!-- AVERAGE -->
+
+            <div class="performance-card">
+
+                <div class="performance-top">
+
+                    <div>
+
+                        <div class="performance-title">
+                            Average Marks
+                        </div>
+
+                        <div class="performance-number">
+                            {{ student.average_marks }}<span>%</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="student-progress">
+
+                    <div
+                        class="student-progress-bar"
+                        style="width: {{ student.average_marks }}%;"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- GRADE -->
+
+            <div class="overall-grade-card">
+
+                <div class="overall-grade-letter">
+                    {{ student.overall_grade }}
+                </div>
+
+                <div class="overall-grade-label">
+                    Overall Grade
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 </div>
 
+   
 {% endblock %}
