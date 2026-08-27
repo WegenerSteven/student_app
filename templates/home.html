@@ -1,594 +1,1153 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>Student Management System</title>
-
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        color: #1f2937;
-        background: #ffffff;
-        line-height: 1.6;
-      }
-
-      /* =========================
-           NAVBAR
-        ========================= */
-
-      nav {
-        height: 72px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 8%;
-        border-bottom: 1px solid #e5e7eb;
-        background: white;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-      }
-
-      .logo {
-        font-size: 21px;
-        font-weight: 700;
-        color: #2563eb;
-      }
-
-      .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-      }
-
-      .nav-links a {
-        text-decoration: none;
-        color: #374151;
-        font-size: 15px;
-      }
-
-      .nav-links a:hover {
-        color: #2563eb;
-      }
-
-      .login-btn {
-        border: 1px solid #2563eb;
-        padding: 9px 18px;
-        border-radius: 6px;
-        color: #2563eb !important;
-      }
-
-      .register-btn {
-        background: #2563eb;
-        color: white !important;
-        padding: 10px 18px;
-        border-radius: 6px;
-      }
-
-      /* =========================
-           HERO
-        ========================= */
-
-      .hero {
-        min-height: 620px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 80px 8%;
-        background: #f8fafc;
-        text-align: center;
-      }
-
-      .hero-content {
-        max-width: 700px;
-      }
-
-      .hero-content span {
-        color: #2563eb;
-        font-weight: 600;
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-
-      .hero h1 {
-        font-size: 56px;
-        line-height: 1.1;
-        margin: 15px 0 20px;
-        color: #111827;
-      }
-
-      .hero p {
-        font-size: 18px;
-        color: #6b7280;
-        margin: 0 auto 30px;
-        max-width: 600px;
-      }
-
-      .hero-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-      }
-
-      .primary-btn {
-        background: #2563eb;
-        color: white;
-        text-decoration: none;
-        padding: 13px 25px;
-        border-radius: 6px;
-        font-weight: 600;
-      }
-
-      .primary-btn:hover {
-        background: #1d4ed8;
-      }
-
-      .secondary-btn {
-        border: 1px solid #d1d5db;
-        color: #374151;
-        text-decoration: none;
-        padding: 13px 25px;
-        border-radius: 6px;
-        font-weight: 600;
-        background: white;
-      }
-
-      .secondary-btn:hover {
-        background: #f3f4f6;
-      }
-
-      /* =========================
-           FEATURES
-        ========================= */
-
-      .features {
-        padding: 90px 8%;
-        text-align: center;
-      }
-
-      .section-title {
-        max-width: 650px;
-        margin: 0 auto 50px;
-      }
-
-      .section-title h2 {
-        font-size: 36px;
-        margin-bottom: 12px;
-        color: #111827;
-      }
-
-      .section-title p {
-        color: #6b7280;
-      }
-
-      .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 25px;
-      }
-
-      .feature-card {
-        padding: 30px 20px;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        text-align: left;
-        transition: 0.3s;
-      }
-
-      .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.07);
-      }
-
-      .feature-icon {
-        width: 45px;
-        height: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #eff6ff;
-        color: #2563eb;
-        border-radius: 8px;
-        font-size: 20px;
-        margin-bottom: 20px;
-      }
-
-      .feature-card h3 {
-        margin-bottom: 10px;
-        font-size: 18px;
-      }
-
-      .feature-card p {
-        color: #6b7280;
-        font-size: 14px;
-      }
-
-      /* =========================
-           HOW IT WORKS
-        ========================= */
-
-      .how-it-works {
-        padding: 90px 8%;
-        background: #f8fafc;
-        text-align: center;
-      }
-
-      .steps {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-        max-width: 950px;
-        margin: auto;
-      }
-
-      .step {
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-      }
-
-      .step-number {
-        width: 45px;
-        height: 45px;
-        margin: 0 auto 20px;
-        border-radius: 50%;
-        background: #2563eb;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-      }
-
-      .step h3 {
-        margin-bottom: 10px;
-      }
-
-      .step p {
-        color: #6b7280;
-        font-size: 14px;
-      }
-
-      /* =========================
-           CTA
-        ========================= */
-
-      .cta {
-        padding: 90px 8%;
-        text-align: center;
-      }
-
-      .cta h2 {
-        font-size: 38px;
-        margin-bottom: 15px;
-      }
-
-      .cta p {
-        color: #6b7280;
-        margin-bottom: 30px;
-      }
-
-      /* =========================
-           FOOTER
-        ========================= */
-
-      footer {
-        background: #111827;
-        color: white;
-        padding: 45px 8%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      footer p {
-        color: #9ca3af;
-        font-size: 14px;
-      }
-
-      .footer-links {
-        display: flex;
-        gap: 25px;
-      }
-
-      .footer-links a {
-        color: #d1d5db;
-        text-decoration: none;
-        font-size: 14px;
-      }
-
-      .footer-links a:hover {
-        color: white;
-      }
-
-      /* =========================
-           RESPONSIVE
-        ========================= */
-
-      @media (max-width: 900px) {
-        .hero {
-          padding: 70px 5%;
-        }
-
-        .hero h1 {
-          font-size: 48px;
-        }
-
-        .feature-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .steps {
-          grid-template-columns: 1fr;
-        }
-      }
-
-      @media (max-width: 600px) {
-        nav {
-          padding: 0 5%;
-        }
-
-        .nav-links {
-          gap: 10px;
-        }
-
-        .nav-links a:not(.login-btn):not(.register-btn) {
-          display: none;
-        }
-
-        .hero {
-          padding: 60px 5%;
-          min-height: 550px;
-        }
-
-        .hero h1 {
-          font-size: 40px;
-        }
-
-        .hero p {
-          font-size: 16px;
-        }
-
-        .hero-buttons {
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .primary-btn,
-        .secondary-btn {
-          width: 180px;
-        }
-
-        .feature-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .features,
-        .how-it-works,
-        .cta {
-          padding: 60px 5%;
-        }
-
-        .section-title h2 {
-          font-size: 30px;
-        }
-
-        .cta h2 {
-          font-size: 30px;
-        }
-
-        footer {
-          flex-direction: column;
-          gap: 20px;
-          text-align: center;
-        }
-
-        .footer-links {
-          flex-wrap: wrap;
-          justify-content: center;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- =========================
-         NAVBAR
-    ========================= -->
-
-    <nav>
-      <div class="logo">Student Management System</div>
-
-      <div class="nav-links">
-        <a href="#features"> Features </a>
-
-        <a href="#how-it-works"> How It Works </a>
-
-        <a class="login-btn" href="{% url 'login' %}"> Login </a>
-
-        <a class="register-btn" href="{% url 'register' %}"> Get Started </a>
+{% extends 'base.html' %} {% block title %}Studora - Student Management Made
+Simple{% endblock %} {% block content %}
+
+<style>
+  /* =========================================================
+   STUDORA HOME PAGE
+========================================================= */
+
+  .home-page {
+    --burgundy: #6b2737;
+    --burgundy-dark: #4d1c28;
+    --burgundy-light: #f7e9ec;
+
+    --green: #4f6f52;
+    --green-dark: #3d5940;
+    --green-light: #edf3ed;
+
+    --gold: #c49a32;
+    --gold-light: #faf3d9;
+
+    --cream: #faf8f2;
+    --text: #292524;
+    --muted: #78716c;
+    --border: #e7e2d8;
+
+    color: var(--text);
+    background: #ffffff;
+    margin: -1.5rem -12px 0;
+  }
+
+  /* =========================================================
+   NAVIGATION
+========================================================= */
+
+  .home-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 7%;
+
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .home-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: var(--burgundy);
+    text-decoration: none;
+    font-size: 21px;
+    font-weight: 800;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: var(--burgundy);
+    color: white;
+
+    font-size: 15px;
+    font-weight: 800;
+  }
+
+  .home-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .home-nav-links a {
+    color: #57534e;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+  }
+
+  .home-nav-links a:hover {
+    color: var(--burgundy);
+  }
+
+  .nav-login {
+    padding: 9px 17px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .nav-register {
+    padding: 10px 18px;
+    border-radius: 8px;
+
+    background: var(--burgundy);
+    color: white !important;
+  }
+
+  .nav-register:hover {
+    background: var(--burgundy-dark);
+  }
+
+  /* =========================================================
+   HERO
+========================================================= */
+
+  .home-hero {
+    position: relative;
+    overflow: hidden;
+
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 70px;
+
+    padding: 90px 8% 100px;
+
+    background: var(--cream);
+  }
+
+  .home-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -100px;
+    top: -100px;
+
+    border-radius: 50%;
+
+    background: var(--gold-light);
+  }
+
+  .home-hero-content {
+    position: relative;
+    z-index: 2;
+
+    max-width: 650px;
+  }
+
+  .hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 18px;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: var(--burgundy-light);
+    color: var(--burgundy);
+
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+  }
+
+  .hero-label::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .home-hero h1 {
+    margin: 0;
+
+    color: #292524;
+
+    font-size: clamp(42px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    font-weight: 850;
+  }
+
+  .home-hero h1 span {
+    color: var(--burgundy);
+  }
+
+  .home-hero-text {
+    max-width: 590px;
+
+    margin: 24px 0 30px;
+
+    color: var(--muted);
+
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .hero-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 13px 22px;
+
+    border-radius: 9px;
+
+    background: var(--burgundy);
+    color: white;
+
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 750;
+
+    box-shadow: 0 8px 20px rgba(107, 39, 55, 0.18);
+
+    transition: 0.2s ease;
+  }
+
+  .hero-primary:hover {
+    background: var(--burgundy-dark);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 21px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: white;
+    color: #57534e;
+
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+
+    transition: 0.2s ease;
+  }
+
+  .hero-secondary:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* =========================================================
+   HERO DASHBOARD CARD
+========================================================= */
+
+  .hero-preview {
+    position: relative;
+    z-index: 2;
+
+    padding: 20px;
+
+    border: 1px solid var(--border);
+    border-radius: 18px;
+
+    background: white;
+
+    box-shadow: 0 20px 45px rgba(41, 37, 36, 0.1);
+  }
+
+  .preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .preview-title {
+    color: #292524;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .preview-status {
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: var(--green-light);
+    color: var(--green);
+
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  .preview-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+
+    margin-top: 15px;
+  }
+
+  .preview-stat {
+    padding: 14px;
+
+    border-radius: 11px;
+
+    background: #faf9f6;
+    border: 1px solid #eeeae2;
+  }
+
+  .preview-stat-label {
+    color: #918a83;
+
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .preview-stat-value {
+    margin-top: 4px;
+
+    color: var(--burgundy);
+
+    font-size: 22px;
+    font-weight: 850;
+  }
+
+  .preview-students {
+    margin-top: 15px;
+  }
+
+  .preview-student {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #f0ede7;
+  }
+
+  .preview-student:last-child {
+    border-bottom: none;
+  }
+
+  .preview-avatar {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--gold-light);
+    color: #8a6815;
+
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .preview-student-name {
+    flex: 1;
+
+    color: #44403c;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .preview-grade {
+    padding: 4px 8px;
+
+    border-radius: 6px;
+
+    background: var(--green-light);
+    color: var(--green);
+
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  /* =========================================================
+   STATS STRIP
+========================================================= */
+
+  .home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    max-width: 1050px;
+
+    margin: -35px auto 0;
+
+    position: relative;
+    z-index: 5;
+
+    background: white;
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    box-shadow: 0 12px 30px rgba(41, 37, 36, 0.07);
+  }
+
+  .home-stat {
+    padding: 24px;
+    text-align: center;
+
+    border-right: 1px solid var(--border);
+  }
+
+  .home-stat:last-child {
+    border-right: none;
+  }
+
+  .home-stat strong {
+    display: block;
+
+    color: var(--burgundy);
+
+    font-size: 25px;
+    font-weight: 850;
+  }
+
+  .home-stat span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* =========================================================
+   FEATURES
+========================================================= */
+
+  .home-section {
+    padding: 95px 8%;
+  }
+
+  .home-section-heading {
+    max-width: 650px;
+
+    margin: 0 auto 50px;
+
+    text-align: center;
+  }
+
+  .section-tag {
+    color: var(--green);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .home-section-heading h2 {
+    margin: 10px 0 12px;
+
+    color: #292524;
+
+    font-size: 36px;
+    line-height: 1.15;
+    font-weight: 850;
+  }
+
+  .home-section-heading p {
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 17px;
+
+    max-width: 1150px;
+    margin: auto;
+  }
+
+  .feature-card {
+    padding: 25px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: white;
+
+    transition: 0.25s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+
+    border-color: #d7cfc0;
+
+    box-shadow: 0 14px 30px rgba(41, 37, 36, 0.08);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 10px;
+
+    background: var(--burgundy-light);
+    color: var(--burgundy);
+
+    font-size: 20px;
+  }
+
+  .feature-card:nth-child(2) .feature-icon {
+    background: var(--green-light);
+    color: var(--green);
+  }
+
+  .feature-card:nth-child(3) .feature-icon {
+    background: var(--gold-light);
+    color: #927018;
+  }
+
+  .feature-card:nth-child(4) .feature-icon {
+    background: #f0ece5;
+    color: #655b4f;
+  }
+
+  .feature-card h3 {
+    margin: 0 0 8px;
+
+    color: #292524;
+
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .feature-card p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+  .how-section {
+    padding: 90px 8%;
+
+    background: var(--cream);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  .step {
+    position: relative;
+
+    padding: 28px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: white;
+  }
+
+  .step-number {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 9px;
+
+    background: var(--burgundy);
+    color: white;
+
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .step:nth-child(2) .step-number {
+    background: var(--green);
+  }
+
+  .step:nth-child(3) .step-number {
+    background: var(--gold);
+  }
+
+  .step h3 {
+    margin: 0 0 8px;
+
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  .step p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 13px;
+  }
+
+  /* =========================================================
+   CTA
+========================================================= */
+
+  .home-cta {
+    padding: 85px 8%;
+
+    text-align: center;
+
+    background: var(--burgundy);
+    color: white;
+  }
+
+  .home-cta h2 {
+    margin: 0 0 12px;
+
+    font-size: 36px;
+    font-weight: 850;
+  }
+
+  .home-cta p {
+    margin: 0 auto 25px;
+
+    max-width: 500px;
+
+    color: #ead9dd;
+
+    font-size: 15px;
+  }
+
+  .cta-button {
+    display: inline-flex;
+
+    padding: 13px 24px;
+
+    border-radius: 9px;
+
+    background: #f3d36a;
+    color: #4d3a08;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    transition: 0.2s ease;
+  }
+
+  .cta-button:hover {
+    background: #e8c34d;
+    color: #4d3a08;
+    transform: translateY(-2px);
+  }
+
+  /* =========================================================
+   FOOTER
+========================================================= */
+
+  .home-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 28px 8%;
+
+    background: #292524;
+    color: white;
+  }
+
+  .footer-brand {
+    font-weight: 800;
+  }
+
+  .footer-tagline {
+    margin-top: 3px;
+
+    color: #a8a29e;
+
+    font-size: 12px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 22px;
+  }
+
+  .footer-links a {
+    color: #d6d3d1;
+
+    text-decoration: none;
+
+    font-size: 12px;
+  }
+
+  .footer-links a:hover {
+    color: white;
+  }
+
+  /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+  @media (max-width: 1000px) {
+    .home-hero {
+      grid-template-columns: 1fr;
+
+      text-align: center;
+
+      padding: 75px 6%;
+    }
+
+    .home-hero-content {
+      margin: auto;
+    }
+
+    .home-hero-text {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      justify-content: center;
+    }
+
+    .hero-preview {
+      max-width: 520px;
+      width: 100%;
+      margin: auto;
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .home-page {
+      margin-left: -12px;
+      margin-right: -12px;
+    }
+
+    .home-nav {
+      padding: 15px 5%;
+    }
+
+    .home-nav-links a:not(.nav-login):not(.nav-register) {
+      display: none;
+    }
+
+    .home-hero {
+      padding: 60px 6% 80px;
+    }
+
+    .home-hero h1 {
+      font-size: 43px;
+      letter-spacing: -1.5px;
+    }
+
+    .home-stats {
+      grid-template-columns: 1fr;
+
+      margin: -25px 5% 0;
+    }
+
+    .home-stat {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .home-stat:last-child {
+      border-bottom: none;
+    }
+
+    .home-section,
+    .how-section {
+      padding: 70px 6%;
+    }
+
+    .home-section-heading h2 {
+      font-size: 30px;
+    }
+
+    .feature-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .steps {
+      grid-template-columns: 1fr;
+    }
+
+    .home-cta {
+      padding: 70px 6%;
+    }
+
+    .home-cta h2 {
+      font-size: 30px;
+    }
+
+    .home-footer {
+      flex-direction: column;
+      gap: 18px;
+
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 450px) {
+    .home-nav-links {
+      gap: 7px;
+    }
+
+    .nav-login,
+    .nav-register {
+      padding: 8px 10px;
+    }
+
+    .home-hero h1 {
+      font-size: 38px;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+    }
+
+    .hero-primary,
+    .hero-secondary {
+      width: 100%;
+    }
+
+    .preview-stat-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="home-page">
+  <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+  <nav class="home-nav">
+    <a href="{% url 'register' %}" class="home-brand">
+      <span class="brand-mark"> S </span>
+
+      Studora
+    </a>
+
+    <div class="home-nav-links">
+      <a href="#features"> Features </a>
+
+      <a href="#how-it-works"> How It Works </a>
+
+      <a href="{% url 'login' %}" class="nav-login"> Login </a>
+
+      <a href="{% url 'register' %}" class="nav-register"> Get Started </a>
+    </div>
+  </nav>
+
+  <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+  <section class="home-hero">
+    <div class="home-hero-content">
+      <div class="hero-label">Student Management Platform</div>
+
+      <h1>
+        Keep your students
+        <span>organized.</span>
+      </h1>
+
+      <p class="home-hero-text">
+        Studora gives you a simple way to manage student records, courses, marks
+        and academic performance — all from one organized platform.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="{% url 'register' %}" class="hero-primary"> Get Started → </a>
+
+        <a href="{% url 'login' %}" class="hero-secondary"> Sign In </a>
       </div>
-    </nav>
+    </div>
 
-    <!-- =========================
-         HERO SECTION
-    ========================= -->
+    <!-- Dashboard Preview -->
 
-    <section class="hero">
-      <div class="hero-content">
-        <span> Student Management System </span>
+    <div class="hero-preview">
+      <div class="preview-header">
+        <div class="preview-title">Student Overview</div>
 
-        <h1>
-          Manage Students.<br />
-          Simplify Your Workflow.
-        </h1>
+        <div class="preview-status">SYSTEM ACTIVE</div>
+      </div>
 
-        <p>
-          A simple and efficient platform for managing student records,
-          searching information, and keeping everything organized in one place.
-        </p>
+      <div class="preview-stat-grid">
+        <div class="preview-stat">
+          <div class="preview-stat-label">Students</div>
 
-        <div class="hero-buttons">
-          <a class="primary-btn" href="{% url 'register' %}"> Get Started </a>
+          <div class="preview-stat-value">124</div>
+        </div>
 
-          <a class="secondary-btn" href="{% url 'login' %}"> Sign In </a>
+        <div class="preview-stat">
+          <div class="preview-stat-label">Courses</div>
+
+          <div class="preview-stat-value">18</div>
         </div>
       </div>
-    </section>
 
-    <!-- =========================
+      <div class="preview-students">
+        <div class="preview-student">
+          <div class="preview-avatar">AM</div>
+
+          <div class="preview-student-name">Alex Morgan</div>
+
+          <div class="preview-grade">A</div>
+        </div>
+
+        <div class="preview-student">
+          <div class="preview-avatar">JK</div>
+
+          <div class="preview-student-name">James Kamau</div>
+
+          <div class="preview-grade">B+</div>
+        </div>
+
+        <div class="preview-student">
+          <div class="preview-avatar">SN</div>
+
+          <div class="preview-student-name">Sarah Njeri</div>
+
+          <div class="preview-grade">A-</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+         QUICK STATS
+    ====================================================== -->
+
+  <div class="home-stats">
+    <div class="home-stat">
+      <strong> Student Records </strong>
+
+      <span> Centralized information </span>
+    </div>
+
+    <div class="home-stat">
+      <strong> Course Tracking </strong>
+
+      <span> Keep academic data organized </span>
+    </div>
+
+    <div class="home-stat">
+      <strong> Grade Management </strong>
+
+      <span> Monitor student performance </span>
+    </div>
+  </div>
+
+  <!-- =====================================================
          FEATURES
-    ========================= -->
+    ====================================================== -->
 
-    <section class="features" id="features">
-      <div class="section-title">
-        <h2>Everything You Need to Manage Students</h2>
+  <section class="home-section" id="features">
+    <div class="home-section-heading">
+      <div class="section-tag">What Studora offers</div>
+
+      <h2>Everything you need in one place.</h2>
+
+      <p>
+        Manage the important parts of your student records without dealing with
+        complicated systems.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👨‍🎓</div>
+
+        <h3>Student Records</h3>
 
         <p>
-          Keep your student information organized and accessible with simple
-          tools designed to make management easier.
+          Store names, admission numbers, contact details and academic
+          information in one central location.
         </p>
       </div>
 
-      <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">👨‍🎓</div>
+      <div class="feature-card">
+        <div class="feature-icon">🔎</div>
 
-          <h3>Student Records</h3>
+        <h3>Quick Search</h3>
 
-          <p>
-            Create and manage detailed student records from one centralized
-            platform.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">🔍</div>
-
-          <h3>Quick Search</h3>
-
-          <p>
-            Find student information quickly using names and email addresses.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">✏️</div>
-
-          <h3>Easy Updates</h3>
-
-          <p>Update student information whenever changes are needed.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-
-          <h3>Grade Tracking</h3>
-
-          <p>
-            Automatically calculate and display student grades based on their
-            marks.
-          </p>
-        </div>
+        <p>
+          Quickly find students using their name, email or admission
+          information.
+        </p>
       </div>
-    </section>
 
-    <!-- =========================
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+
+        <h3>Course Management</h3>
+
+        <p>
+          Keep track of the courses students are taking and view their
+          individual results.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+
+        <h3>Grade Tracking</h3>
+
+        <p>
+          View marks, grades and overall academic performance without
+          unnecessary complexity.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
          HOW IT WORKS
-    ========================= -->
+    ====================================================== -->
 
-    <section class="how-it-works" id="how-it-works">
-      <div class="section-title">
-        <h2>How It Works</h2>
+  <section class="how-section" id="how-it-works">
+    <div class="home-section-heading">
+      <div class="section-tag">Simple workflow</div>
+
+      <h2>Get started in three steps.</h2>
+
+      <p>
+        Studora keeps the process straightforward from the moment you create
+        your account.
+      </p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">01</div>
+
+        <h3>Create your account</h3>
+
+        <p>Register an account and access your student management workspace.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">02</div>
+
+        <h3>Add your students</h3>
 
         <p>
-          Get started with your student management system in just a few simple
-          steps.
+          Enter student information and keep their records organized from one
+          place.
         </p>
       </div>
 
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">1</div>
+      <div class="step">
+        <div class="step-number">03</div>
 
-          <h3>Create an Account</h3>
+        <h3>Manage & track</h3>
 
-          <p>
-            Register your account to gain access to the student management
-            dashboard.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">2</div>
-
-          <h3>Add Students</h3>
-
-          <p>
-            Add student information including their name, email, phone number
-            and marks.
-          </p>
-        </div>
-
-        <div class="step">
-          <div class="step-number">3</div>
-
-          <h3>Manage Records</h3>
-
-          <p>
-            Search, view, edit and delete student records whenever necessary.
-          </p>
-        </div>
+        <p>
+          Search records, manage courses, update marks and monitor academic
+          performance.
+        </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- =========================
+  <!-- =====================================================
          CTA
-    ========================= -->
+    ====================================================== -->
 
-    <section class="cta">
-      <h2>Ready to Get Started?</h2>
+  <section class="home-cta">
+    <h2>Ready to organize your students?</h2>
 
-      <p>Start managing your student records more efficiently today.</p>
+    <p>
+      Start using Studora and make student management simpler, clearer and more
+      organized.
+    </p>
 
-      <a class="primary-btn" href="{% url 'register' %}">
-        Create Your Account
-      </a>
-    </section>
+    <a href="{% url 'register' %}" class="cta-button">
+      Create Your Account →
+    </a>
+  </section>
 
-    <!-- =========================
+  <!-- =====================================================
          FOOTER
-    ========================= -->
+    ====================================================== -->
 
-    <footer>
-      <div>
-        <strong> Student Management System </strong>
+  <footer class="home-footer">
+    <div>
+      <div class="footer-brand">Studora</div>
 
-        <p>Simple. Efficient. Organized.</p>
-      </div>
+      <div class="footer-tagline">Simple. Organized. Student-focused.</div>
+    </div>
 
-      <div class="footer-links">
-        <a href="#features"> Features </a>
+    <div class="footer-links">
+      <a href="#features"> Features </a>
 
-        <a href="#how-it-works"> How It Works </a>
+      <a href="#how-it-works"> How It Works </a>
 
-        <a href="{% url 'login' %}"> Login </a>
+      <a href="{% url 'login' %}"> Login </a>
 
-        <a href="{% url 'register' %}"> Register </a>
-      </div>
-    </footer>
-  </body>
-</html>
+      <a href="{% url 'register' %}"> Register </a>
+    </div>
+  </footer>
+</div>
+
+{% endblock %}

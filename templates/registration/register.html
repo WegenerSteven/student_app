@@ -1,63 +1,445 @@
 {% extends 'base.html' %}
 
-{% block title %}Register - Student Management{% endblock %}
+{% block title %}Register - Studora{% endblock %}
 
 {% block content %}
+
+<style>
+    .register-page {
+        min-height: calc(100vh - 100px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 15px;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 700px;
+        background: #ffffff;
+        padding: 35px 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .logo {
+        width: 55px;
+        height: 55px;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #2563eb;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 12px;
+    }
+
+    .register-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #111827;
+    }
+
+    .subtitle {
+        color: #6b7280;
+        margin-bottom: 0;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: 600;
+        color: #374151;
+        font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 11px 13px;
+        border: 1px solid #d1d5db;
+        border-radius: 7px;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .courses-section {
+        margin-top: 5px;
+        margin-bottom: 20px;
+    }
+
+    .courses-section > label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 600;
+        color: #374151;
+        font-size: 14px;
+    }
+
+    .courses-list {
+        padding: 15px;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    .courses-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 20px;
+    }
+
+    .courses-list li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .courses-list input {
+        width: auto;
+    }
+
+    .field-error {
+        color: #dc2626;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        border: none;
+        background: #2563eb;
+        color: white;
+        padding: 12px;
+        border-radius: 7px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 5px;
+    }
+
+    .submit-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .login-link a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+        .register-card {
+            padding: 25px 20px;
+        }
+
+        .form-row {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .courses-list ul {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 
 <div class="register-page">
 
     <div class="register-card">
 
-        <div class="logo">
-            SM
+        <div class="register-header">
+
+            <div class="logo">
+                ST
+            </div>
+
+            <h1>Create Studora Account</h1>
+
+            <p class="subtitle">
+                Create your student account.
+            </p>
+
         </div>
 
-        <h1>Create Account</h1>
-
-        <p class="subtitle">
-            Create your account to manage students.
-        </p>
 
         <form method="post" enctype="multipart/form-data">
+
             {% csrf_token %}
 
-            {% for field in form %}
+
+            <!-- First Name and Surname -->
+            <div class="form-row">
 
                 <div class="form-group">
 
-                    <label for="{{ field.id_for_label }}">
-                        {{ field.label }}
+                    <label for="{{ form.first_name.id_for_label }}">
+                        First Name
                     </label>
 
-                    {{ field }}
+                    {{ form.first_name }}
 
-                    {% if field.errors %}
+                    {% if form.first_name.errors %}
                         <div class="field-error">
-                            {% for error in field.errors %}
+                            {% for error in form.first_name.errors %}
                                 {{ error }}
                             {% endfor %}
                         </div>
                     {% endif %}
 
-                    {% if field.help_text %}
-                        <small class="help-text">
-                            {{ field.help_text }}
-                        </small>
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.last_name.id_for_label }}">
+                        Surname
+                    </label>
+
+                    {{ form.last_name }}
+
+                    {% if form.last_name.errors %}
+                        <div class="field-error">
+                            {% for error in form.last_name.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
                     {% endif %}
 
                 </div>
 
-            {% endfor %}
+            </div>
 
+
+            <!-- Email and Phone -->
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="{{ form.email.id_for_label }}">
+                        Email
+                    </label>
+
+                    {{ form.email }}
+
+                    {% if form.email.errors %}
+                        <div class="field-error">
+                            {% for error in form.email.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.phone.id_for_label }}">
+                        Phone
+                    </label>
+
+                    {{ form.phone }}
+
+                    {% if form.phone.errors %}
+                        <div class="field-error">
+                            {% for error in form.phone.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Username and Year -->
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="{{ form.username.id_for_label }}">
+                        Username
+                    </label>
+
+                    {{ form.username }}
+
+                    {% if form.username.errors %}
+                        <div class="field-error">
+                            {% for error in form.username.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.year_of_study.id_for_label }}">
+                        Year of Study
+                    </label>
+
+                    {{ form.year_of_study }}
+
+                    {% if form.year_of_study.errors %}
+                        <div class="field-error">
+                            {% for error in form.year_of_study.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Passwords -->
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="{{ form.password1.id_for_label }}">
+                        Password
+                    </label>
+
+                    {{ form.password1 }}
+
+                    {% if form.password1.errors %}
+                        <div class="field-error">
+                            {% for error in form.password1.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="{{ form.password2.id_for_label }}">
+                        Confirm Password
+                    </label>
+
+                    {{ form.password2 }}
+
+                    {% if form.password2.errors %}
+                        <div class="field-error">
+                            {% for error in form.password2.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Profile Photo -->
+            <div class="form-group">
+
+                <label for="{{ form.profile_photo.id_for_label }}">
+                    Profile Photo
+                </label>
+
+                {{ form.profile_photo }}
+
+                {% if form.profile_photo.errors %}
+                    <div class="field-error">
+                        {% for error in form.profile_photo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Courses -->
+            <div class="courses-section">
+
+                <label>
+                    Courses
+                </label>
+
+                <div class="courses-list">
+                    {{ form.courses }}
+                </div>
+
+                {% if form.courses.errors %}
+                    <div class="field-error">
+                        {% for error in form.courses.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- Submit -->
             <button type="submit" class="submit-btn">
                 Create Account
             </button>
 
         </form>
 
+
         <p class="login-link">
+
             Already have an account?
-            <a href="{% url 'login' %}">Login</a>
+
+            <a href="{% url 'login' %}">
+                Login
+            </a>
+
         </p>
 
     </div>
